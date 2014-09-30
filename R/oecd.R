@@ -42,7 +42,7 @@ getDatasets <- function() {
 }
 
 # Search reference series in data frame from getDatasets
-searchSeries <- function(data = getDatasets(), string = "gdp", metadata = FALSE) {
+searchSeries <- function(data = getDatasets(), string = "unemployment", metadata = FALSE) {
   results <- data[str_detect(data$DatasetTitle, ignore.case(string)),]
   if(!metadata) results <- results[,-3]
   return(results)
@@ -89,6 +89,16 @@ getDesc <- function(series) {
   return(df_desc_list)
 }
 
+# Browse the metadata related to a series
+browseMetadata <- function(data = getDatasets(), series) {
+  metadata <- data[which(data$DatasetCode == series),3]
+  tempxml <- tempfile("temp", fileext = ".xml")
+  writeLines(metadata, con = tempxml)
+  browseURL(tempxml)
+}
+
+#### Test code ####
+
 datasets <- getDatasets()
 q <- searchSeries(datasets, "product")
 series <- "PMR"
@@ -99,4 +109,3 @@ test$indicator_desc <- desc$indicator$description[match(test$indicator, desc$ind
 
 test <- getSeries(series, c("FRA", "DEU"))
 desc <- getDesc("SNA_TABLE1")
-
