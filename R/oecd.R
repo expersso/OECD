@@ -2,18 +2,20 @@ library(XML)
 
 # Make urls for GET requests
 makeURL <- function(query, filter = "") {
+  filter <- ifelse(filter == "", "", 
+                   paste0("$filter=", filter, "&"))
   url <- paste0("http://stats.oecd.org/OECDStatWCF_OData/OData.svc/", 
                 query, 
-                "?$filter=", 
                 filter, 
-                "&$format=json")
+                "$format=json")
   return(url)
 }
 
-makeCountryFilter <- function(country = "all") {
+# Make filter string for countries for query
+makeCountryFilter <- function(country = "all", term = "LOCATION") {
   suppressWarnings(
     if(!country == "all") {
-    countries <- sprintf("(LOCATION eq '%s')", country) %>% 
+    countries <- sprintf("(%s eq '%s')", term, country) %>% 
     paste0(collapse = " or ") %>% 
     str_replace_all(" ", "%20")
     return(countries)
@@ -22,9 +24,17 @@ makeCountryFilter <- function(country = "all") {
   })
 }
 
-# Download data frame with all OECD datasets
+# Get meaningful variable names
+getDimensions <- function(series) {
+  url <- makeURL(query = paste0("GetDimension?DatasetCode=", series, "&"))
+  df_def <- content(GET(url))
+  df_def <- do.call(rbind, lapply(df_def[[2]], data.frame, stringsAsFactors = FALSE))
+  return(df_def)
+}
+
+# Download dataframe with all OECD datasets
 getDatasets <- function() {
-  url <- makeURL("GetDatasets")
+  url <- makeURL("GetDatasets?")
   data <- content(GET(url))
   data <- data[[2]]
   data <- ldply(data, "unlist")
@@ -32,32 +42,24 @@ getDatasets <- function() {
 }
 
 # Search reference series in data frame from getDatasets
-searchRefseries <- function(data = getDatasets(), string = "gdp", metadata = FALSE) {
+searchSeries <- function(data = getDatasets(), string = "gdp", metadata = FALSE) {
   results <- data[str_detect(data$DatasetTitle, ignore.case(string)),]
   if(!metadata) results <- results[,-3]
   return(results)
 }
 
 # Download reference series
-getRefseries <- function(series, country = "all") {
-  url <- makeURL(series, makeCountryFilter(country))
+getSeries <- function(series, country = "all") {
+  df_dim <- getDimensions(series)
+  term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("COU", "COUNTRY", "LOCATION")]
+  
+  url <- makeURL(paste0(series, "?"), makeCountryFilter(country = country, term = term))
   result <- content(GET(url))
   result <- rbind.fill(lapply(result[[2]], function(f) {
     as.data.frame(Filter(Negate(is.null), f), stringsAsFactors = FALSE)
   }))
   names(result) <- tolower(names(result))
   return(result)
-}
-
-# Get meaningful variable names
-getNames <- function(data, series) {
-  url_def <- makeURL(paste0("GetDimension?DatasetCode=", series))
-  df_def <- content(GET(url_def))
-  df_def <- do.call(rbind, lapply(df_def[[2]], data.frame, stringsAsFactors = FALSE))
-  names(data)[names(data) %in% df_def$DimensionCode] <- 
-    df_def$DimensionName[names(data) %in% df_def$DimensionCode]
-  names(data) <- tolower(names(data))
-  return(data)
 }
 
 # Get XML with variable descriptions
@@ -88,20 +90,13 @@ getDesc <- function(series) {
 }
 
 datasets <- getDatasets()
-q <- searchRefseries(datasets, "gdp")
-series <- "TABLE3_AEO2013_V2"
-test <- getRefseries(series)
-test <- getNames(test, series)
+q <- searchSeries(datasets, "product")
+series <- "PMR"
+pmr <- getSeries(series, country = "AUS")
 desc <- getDesc(series)
-
+getDimensions(series)
 test$indicator_desc <- desc$indicator$description[match(test$indicator, desc$indicator$value)]
 
-test <- getRefseries("SNA_TABLE1", country = c("FRA", "DEU"))
+test <- getSeries(series, c("FRA", "DEU"))
 desc <- getDesc("SNA_TABLE1")
 
-test$time <- as.numeric(test$time)
-test %>%
-  filter(transact == "B1_GA", measure == "VIXOB") %>%
-  group_by(location) %>%
-  mutate(rebased = value/value[time == 1975]) %>%
-  qplot(data=., x = time, y = rebased, color = location, group = location, geom = "line")
