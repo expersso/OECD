@@ -3,7 +3,8 @@ Type: Package
 Title: Provides a wrapper to the OECD API
 Version: 1.0
 Date: 2014-09-29
-Author: Eric Persson
+Author: Eric Persson <eric.persson@ecb.int>
 Maintainer: Eric Persson <eric.persson@ecb.int>
-Description: Provides convenience functions that allows the user to download data from the OECD.
-License: What license is it under?
+Description: Search and extract data from the Organization for Economic Cooperation and Development (OECD)
+License: GPL-3
+URL: https://www.github.com/epersso1/oecd
