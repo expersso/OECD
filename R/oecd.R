@@ -1,35 +1,45 @@
 library(XML)
+library(lubridate)
 
 # Make urls for GET requests
 makeURL <- function(query, filter = "") {
+  filter <- paste0(filter, collapse = " and ")
   filter <- ifelse(filter == "", "", 
                    paste0("$filter=", filter, "&"))
   url <- paste0("http://stats.oecd.org/OECDStatWCF_OData/OData.svc/", 
                 query, 
                 filter, 
                 "$format=json")
+  url <- str_replace_all(url, " ", "%20")
   return(url)
 }
 
-# Make filter string for countries for query
-makeCountryFilter <- function(country = "all", term = "LOCATION") {
+# Make filter string for countries
+makeCountryFilter <- function(country = "all", country_term = "LOCATION") {
   suppressWarnings(
-    if(!country == "all") {
-    countries <- sprintf("(%s eq '%s')", term, country) %>% 
-    paste0(collapse = " or ") %>% 
-    str_replace_all(" ", "%20")
+    if(country != "all") {
+    countries <- paste0(sprintf("(%s eq '%s')", country_term, country), collapse = " or ")
     return(countries)
-  } else {
-    return("")
-  })
+  } else return(""))
 }
 
-# Get meaningful variable names
+# Make filter string for time
+makeTimeFilter <- function(time = NULL, time_term = "TIME") {
+  suppressWarnings(
+    if(!is.null(time)) {
+      time <- sprintf("(%s ge '%s')", time_term, time)
+      return(time)
+    } else {
+      return("")
+    })
+}
+
+# Get dimensions of a dataset
 getDimensions <- function(series) {
   url <- makeURL(query = paste0("GetDimension?DatasetCode=", series, "&"))
-  df_def <- content(GET(url))
-  df_def <- do.call(rbind, lapply(df_def[[2]], data.frame, stringsAsFactors = FALSE))
-  return(df_def)
+  data <- content(GET(url))
+  data <- do.call(rbind, lapply(data[[2]], data.frame, stringsAsFactors = FALSE))
+  return(data)
 }
 
 # Download dataframe with all OECD datasets
@@ -49,11 +59,17 @@ searchSeries <- function(data = getDatasets(), string = "unemployment", metadata
 }
 
 # Download reference series
-getSeries <- function(series, country = "all") {
+getSeries <- function(series, country = "all", since = NULL) {
   df_dim <- getDimensions(series)
-  term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("COU", "COUNTRY", "LOCATION")]
+  country_term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("COU", "COUNTRY", "LOCATION")]
+  time_term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("TIME", "YEAR", "YEA")]
   
-  url <- makeURL(paste0(series, "?"), makeCountryFilter(country = country, term = term))
+  url <- makeURL(query = paste0(series, "?"), 
+                 filter = paste0(makeCountryFilter(country = country, 
+                                          country_term = country_term), 
+                                 makeTimeFilter(time = since, 
+                                                time_term = time_term)))
+  
   result <- content(GET(url))
   result <- rbind.fill(lapply(result[[2]], function(f) {
     as.data.frame(Filter(Negate(is.null), f), stringsAsFactors = FALSE)
@@ -90,7 +106,7 @@ getDesc <- function(series) {
 }
 
 # Browse the metadata related to a series
-browseMetadata <- function(data = getDatasets(), series) {
+browseMetadata <- function(series, data = getDatasets()) {
   metadata <- data[which(data$DatasetCode == series),3]
   tempxml <- tempfile("temp", fileext = ".xml")
   writeLines(metadata, con = tempxml)
@@ -100,12 +116,13 @@ browseMetadata <- function(data = getDatasets(), series) {
 #### Test code ####
 
 datasets <- getDatasets()
-q <- searchSeries(datasets, "product")
-series <- "PMR"
-pmr <- getSeries(series, country = "AUS")
+q <- searchSeries(datasets, "unemployment")
+series <- "CPL"
+mig <- getSeries(series, "all", 2009)
 desc <- getDesc(series)
 getDimensions(series)
 test$indicator_desc <- desc$indicator$description[match(test$indicator, desc$indicator$value)]
-
 test <- getSeries(series, c("FRA", "DEU"))
 desc <- getDesc("SNA_TABLE1")
+
+browseMetadata("SNA_TABLE1")
