@@ -1,0 +1,7 @@
+---
+title: "OECD package"
+output: html_document
+---
+
+This is an `R` package that allows the user to download data from the
+OECD's API in a dynamic and reproducible way.
