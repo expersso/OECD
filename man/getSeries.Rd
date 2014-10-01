@@ -20,7 +20,7 @@ Data frame with country-year observations.
 Returns a data frame with the requested data, downloaded from the OECD's API.
 }
 \examples{
-df <- getSeries("D_DUR", country = c("DEU", "FRA"), since = 2008)
+df <- getSeries("DUR_D", country = c("DEU", "FRA"), since = 2008)
 head(df)
 }
 

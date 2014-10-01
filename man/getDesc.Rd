@@ -19,7 +19,7 @@ in the requested series.
 \details{
 The data frames returned with \code{\link{getSeries}} often contain variables
 whose values are not obvious. For example,
-\code{\link{getSeries("MIG_UNEMP_GENDER")}} returns a data frame with the
+\code{getSeries("MIG_UNEMP_GENDER")} returns a data frame with the
 variable \code{birth} which has the values \code{FB} and \code{NB}, and the
 variable \code{rate} which has the values \code{N_RATE} and \code{U_RATE}.
 Since the meaning of these are not obvious, \code{getDesc} returns a list of
@@ -27,7 +27,7 @@ data frames that can serve as human-readable look-up tables of variables
 (see examples below).
 }
 \examples{
-series <- "MIG_UNEM_GENDER"
+series <- "MIG_UNEMP_GENDER"
 df <- getSeries(series)
 unique(df$birth)
 desc <- getDesc(series)

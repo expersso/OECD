@@ -22,8 +22,8 @@ License: \tab GPL-3\cr
 \author{Eric Persson}
 \examples{
 datasets <- getDatasets()
-q <- searchSeries(datasets, "unemployment")
-series <- q[3, 1]
+searchSeries(datasets, "unemployment")
+series <- "MIG_UNEMP_GENDER"
 df <- getSeries(series)
 head(df)
 getDimensions(series)

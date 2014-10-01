@@ -22,6 +22,6 @@ Opens up a web browser with the metadata related to the requested series.
 }
 \examples{
 datasets <- getDatasets()
-getMetadata(datasets, "DUR_D")
+browseMetadata("DUR_D", datasets)
 }
 

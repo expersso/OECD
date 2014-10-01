@@ -2,8 +2,12 @@
 
 # Make urls for GET requests
 makeURL <- function(query, filter = "") {
-  filter <- paste0(filter, collapse = " and ")
-  filter <- ifelse(filter == "", "", 
+  if(all(nchar(filter) > 0)) {
+    filter <- paste0(filter, collapse = " and ")
+  } else {
+    filter <- paste0(filter, collapse = "")
+  }
+  filter <- ifelse(nchar(filter) == 0, "", 
                    paste0("$filter=", filter, "&"))
   url <- paste0("http://stats.oecd.org/OECDStatWCF_OData/OData.svc/", 
                 query, 
@@ -18,6 +22,7 @@ makeCountryFilter <- function(country = "all", country_term = "LOCATION") {
   suppressWarnings(
     if(country != "all") {
       countries <- paste0(sprintf("(%s eq '%s')", country_term, country), collapse = " or ")
+      countries <- paste0("(", countries, ")")
       return(countries)
     } else return(""))
 }

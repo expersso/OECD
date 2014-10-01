@@ -29,6 +29,6 @@ datasets <- getDatasets()
 searchSeries(datasets, "unemployment")
 }
 \seealso{
-\code{\link{getDatasets()}}
+\code{\link{getDatasets}}
 }
 

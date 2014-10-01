@@ -39,7 +39,7 @@ getDatasets <- function() {
   url <- makeURL("GetDatasets?")
   data <- httr::content(httr::GET(url))
   data <- data[[2]]
-  data <- ldply(data, "unlist")
+  data <- plyr::ldply(data, "unlist")
   return(data)
 }
 
@@ -60,14 +60,14 @@ getDatasets <- function() {
 #' 
 #' @return A data frame.
 #' 
-#' @seealso \code{\link{getDatasets()}}
+#' @seealso \code{\link{getDatasets}}
 #' 
 #' @examples
 #' datasets <- getDatasets()
 #' searchSeries(datasets, "unemployment")
 #' @export
 searchSeries <- function(data = getDatasets(), string = "unemployment", metadata = FALSE) {
-  results <- data[stringr::str_detect(data$DatasetTitle, ignore.case(string)),]
+  results <- data[stringr::str_detect(data$DatasetTitle, stringr::ignore.case(string)),]
   if(!metadata) results <- results[,-3]
   return(results)
 }
@@ -85,7 +85,7 @@ searchSeries <- function(data = getDatasets(), string = "unemployment", metadata
 #' @return Data frame with country-year observations.
 #' 
 #' @examples
-#' df <- getSeries("D_DUR", country = c("DEU", "FRA"), since = 2008)
+#' df <- getSeries("DUR_D", country = c("DEU", "FRA"), since = 2008)
 #' head(df)
 #' @export
 getSeries <- function(series, country = "all", since = NULL) {
@@ -98,7 +98,7 @@ getSeries <- function(series, country = "all", since = NULL) {
   }
   
   url <- makeURL(query = paste0(series, "?"), 
-                 filter = paste0(makeCountryFilter(country = country, 
+                 filter = c(makeCountryFilter(country = country, 
                                           country_term = country_term), 
                                  makeTimeFilter(time = since, 
                                                 time_term = time_term)))
@@ -118,7 +118,7 @@ getSeries <- function(series, country = "all", since = NULL) {
 #' 
 #' The data frames returned with \code{\link{getSeries}} often contain variables
 #' whose values are not obvious. For example, 
-#' \code{\link{getSeries("MIG_UNEMP_GENDER")}} returns a data frame with the 
+#' \code{getSeries("MIG_UNEMP_GENDER")} returns a data frame with the 
 #' variable \code{birth} which has the values \code{FB} and \code{NB}, and the
 #' variable \code{rate} which has the values \code{N_RATE} and \code{U_RATE}.
 #' Since the meaning of these are not obvious, \code{getDesc} returns a list of 
@@ -135,7 +135,7 @@ getSeries <- function(series, country = "all", since = NULL) {
 #' the variable \code{birth} refers to "place of birth".
 #' 
 #' @examples
-#' series <- "MIG_UNEM_GENDER"
+#' series <- "MIG_UNEMP_GENDER"
 #' df <- getSeries(series)
 #' unique(df$birth)
 #' desc <- getDesc(series)
@@ -179,7 +179,7 @@ getDesc <- function(series) {
 #' 
 #' @examples
 #' datasets <- getDatasets()
-#' getMetadata(datasets, "DUR_D")
+#' browseMetadata("DUR_D", datasets)
 #' 
 #' @export
 browseMetadata <- function(series, data = getDatasets()) {
