@@ -12,13 +12,14 @@ getDimensions(series)
 A data frame.
 }
 \description{
-Rreturs a data frame containing names and descriptions
-of the variables of a specified series.
+Returs a data frame containing names and descriptions of the variables
+of a specified series.
 }
 \examples{
 getDimensions("DUR_D")
 }
 \seealso{
-\code{\link{getDatasets}}, \code{\link{searchSeries}}
+\code{\link{getDesc}} for similar functionality regarding variable
+values.
 }
 

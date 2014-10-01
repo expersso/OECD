@@ -10,4 +10,9 @@ License: GPL-3
 URL: https://www.github.com/epersso1/oecd
 Imports:
     XML (>= 3.98-1.1),
-    lubridate (>= 1.3.3)
+    httr (>= 0.5),
+    plyr (>= 1.8.1),
+    stringr (>= 0.6.2)
+Suggests:
+    knitr
+VignetteBuilder: knitr

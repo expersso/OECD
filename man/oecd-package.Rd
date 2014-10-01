@@ -2,9 +2,7 @@
 \alias{oecd-package}
 \alias{oecd}
 \docType{package}
-\title{
-Search and extract data from the OECD's API
-}
+\title{Search and extract data from the OECD's API}
 \description{
 Search and extract data from the Organization for Economic Cooperation and 
 Development (OECD)'s API. Contains convenience functions for searching
@@ -21,11 +19,7 @@ License: \tab GPL-3\cr
 \code{getDatasets()}, \code{searchDatasets()}, \code{getSeries()}, 
 \code{getDimensions()}, \code{getDesc()}, \code{browseMetadata()}
 }
-\author{
-Eric Persson
-
-}
-
+\author{Eric Persson}
 \examples{
 datasets <- getDatasets()
 q <- searchSeries(datasets, "unemployment")
