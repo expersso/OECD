@@ -4,15 +4,15 @@ Title: Search and extract data from the OECD
 Version: 1.0
 Date: 2014-09-29
 Authors@R: person("Eric", "Persson", email = "email@email.com",
-    role = c("aut", "cre"))
+                  role = c("aut", "cre"))
 Description: Search and extract data from the OECD.
 License: GPL-3
 URL: https://www.github.com/epersso1/oecd
 Imports:
-    XML (>= 3.98-1.1),
-    httr (>= 0.5),
-    plyr (>= 1.8.1),
-    stringr (>= 0.6.2)
+  XML (>= 3.98-1.1),
+  httr (>= 0.5),
+  plyr (>= 1.8.1),
+  stringr (>= 0.6.2)
 Suggests:
-    knitr
+  knitr
 VignetteBuilder: knitr
