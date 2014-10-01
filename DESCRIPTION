@@ -3,7 +3,7 @@ Type: Package
 Title: Search and extract data from the OECD
 Version: 1.0
 Date: 2014-09-29
-Authors@R: person("Eric", "Persson", email = "ericpersson1@gmail.com",
+Authors@R: person("Eric", "Persson", email = "email@email.com",
     role = c("aut", "cre"))
 Description: Search and extract data from the OECD.
 License: GPL-3
