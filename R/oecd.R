@@ -34,7 +34,19 @@ makeTimeFilter <- function(time = NULL, time_term = "TIME") {
     })
 }
 
-# Get dimensions of a dataset
+#' Get the dimensions of a dataset.
+#' 
+#' Rreturs a data frame containing names and descriptions 
+#' of the variables of a specified series.
+#' 
+#' @param series A string containing the code for a series.
+#' 
+#' @return A data frame.
+#' 
+#' @seealso \code{\link{getDatasets}}, \code{\link{searchSeries}}
+#' 
+#' @examples
+#' getDimensions("DUR_D")
 getDimensions <- function(series) {
   url <- makeURL(query = paste0("GetDimension?DatasetCode=", series, "&"))
   data <- content(GET(url))
@@ -42,7 +54,20 @@ getDimensions <- function(series) {
   return(data)
 }
 
-# Download dataframe with all OECD datasets
+#' Get a data frame with information on all available datasets.
+#' 
+#' Returns a data frame with three variables: DatasetCode, 
+#' DatasetTitle, and DatasetMetadata.
+#' 
+#' @return A data frame.
+#' 
+#' @seealso \code{\link{searchSeries}} to search for a specific DatasetCode or a 
+#' keyword in the DatasetTitle, and \code{\link{getDimensions}} to get the 
+#' dimensions of specified DatasetCode.
+#'
+#' @examples
+#' datasets <- getDatasets()
+#' datasets[1:10, 1:2]
 getDatasets <- function() {
   url <- makeURL("GetDatasets?")
   data <- content(GET(url))
@@ -51,18 +76,57 @@ getDatasets <- function() {
   return(data)
 }
 
-# Search reference series in data frame from getDatasets
+#' Search codes and descriptions of available OECD series
+#' 
+#' Returns a data frame containing the series codes, descriptions, and 
+#' (optionally) metadata for the OECD series which match the given criteria.
+#' 
+#' @param data The data frame to search. This can be either a data frame 
+#' previously fetched using \code{\link{getDatasets}} (recommended) or left 
+#' blank, in which case a temporary data frame is fetched. The second option 
+#' adds a few seconds to each search query.
+#' 
+#' @param string A string to search for. Can include regular expressions.
+#' 
+#' @param metadata Whether or not to include a variable with metadata in the 
+#' returned data frame.
+#' 
+#' @return A data frame.
+#' 
+#' @seealso \code{\link{getDatasets()}}
+#' 
+#' @examples
+#' datasets <- getDatasets()
+#' searchSeries(datasets, "unemployment")
 searchSeries <- function(data = getDatasets(), string = "unemployment", metadata = FALSE) {
   results <- data[str_detect(data$DatasetTitle, ignore.case(string)),]
   if(!metadata) results <- results[,-3]
   return(results)
 }
 
-# Download reference series
+#' Download OECD series.
+#' 
+#' Returns a data frame with the requested data, downloaded from the OECD's API.
+#' 
+#' @param series A string with the code for the desired series.
+#' @param country A character vector with iso3c codes 
+#' \code{(e.g. c("USA", "DEU"))}.
+#' 
+#' @param since First year of data.
+#' 
+#' @return Data frame with country-year observations.
+#' 
+#' @examples
+#' df <- getSeries("D_DUR", country = c("DEU", "FRA"), since = 2008)
+#' head(df)
 getSeries <- function(series, country = "all", since = NULL) {
   df_dim <- getDimensions(series)
   country_term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("COU", "COUNTRY", "LOCATION")]
   time_term <- df_dim$DimensionCode[df_dim$DimensionCode %in% c("TIME", "YEAR", "YEA")]
+  
+  if(length(country_term) == 0) {
+    stop("Unit of observation not countries. This functionality not yet implemented.")
+  }
   
   url <- makeURL(query = paste0(series, "?"), 
                  filter = paste0(makeCountryFilter(country = country, 
@@ -86,7 +150,14 @@ getCodelistnode <- function(series) {
   return(codelist)
 }
 
-# Get a list of dataframes with variable descriptions
+#' Get a list of data frames with variable descriptions.
+#' 
+#' Returns a list of data frames containing descriptions of the variable values 
+#' in the requested series.
+#' 
+#' The data frames returned with \code{\link{getSeries}} often contain variables
+#' whose values are not obvious. For example, 
+#' \code{\link{getSeries("MIG_UNEMP_GENDER")}}
 getDesc <- function(series) {
   codelist_node <- getCodelistnode(series)
   codelist_children <- xmlChildren(codelist_node)
@@ -112,17 +183,3 @@ browseMetadata <- function(series, data = getDatasets()) {
   writeLines(metadata, con = tempxml)
   browseURL(tempxml)
 }
-
-#### Test code ####
-
-datasets <- getDatasets()
-q <- searchSeries(datasets, "unemployment")
-series <- "CPL"
-mig <- getSeries(series, "all", 2009)
-desc <- getDesc(series)
-getDimensions(series)
-test$indicator_desc <- desc$indicator$description[match(test$indicator, desc$indicator$value)]
-test <- getSeries(series, c("FRA", "DEU"))
-desc <- getDesc("SNA_TABLE1")
-
-browseMetadata("SNA_TABLE1")
