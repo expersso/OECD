@@ -12,8 +12,7 @@ searchSeries(string = "unemployment", data = getDatasets(),
 \item{data}{The data frame to search. This can be either a data frame
 previously fetched using \code{\link{getDatasets}} (recommended) or left
 blank, in which case a temporary data frame is fetched. The second option
-adds a few seconds to each search query.
-#'}
+adds a few seconds to each search query.}
 
 \item{metadata}{Whether or not to include a variable with metadata in the
 returned data frame.}
