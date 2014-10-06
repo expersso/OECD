@@ -2,50 +2,122 @@
 title: "Reproducible and dynamic access to OECD data"
 author: "Eric Persson"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::pdf_document:
+    fig_caption: yes
+
 vignette: >
   %\VignetteIndexEntry{Reproducible and dynamic access to OECD data}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+```{r options, echo=FALSE}
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE, error = FALSE, fig.path = "./figures")
+library(oecd)
+```
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+### Introduction
 
-## Vignette Info
+The `oecd` package is an `R` package that allows the user to download data from 
+the OECD's API in a dynamic and reproducible way.
 
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+The package can be installed with the following code:
 
-## Styles
+```{r loadLibrary, eval = FALSE}
+library(devtools)
+install_github("epersso1/oecd")
+library(oecd)
+```
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+### How to use the package
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+Unless you know the exact code of the series you're looking for, the best way to 
+start is by downloading a dataframe with all the available datasets and their
+descriptions, and then run searches on it. The search string can be a 
+[regular expression](http://en.wikipedia.org/wiki/Regular_expression), and is 
+case-insensitive.
 
-## Figures
+```{r getDatasets}
+data <- getDatasets()
+searchSeries(string = "unemployment", data = data, metadata = FALSE)
+```
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+Hopefully, this search finds the series you're interested in, in which case we
+can go ahead and download that series:
 
+```{r downloadSeries}
+series <- "MIG_UNEMP_GENDER"
+df <- getSeries(series = series, country = "all", since = 2008)
+head(df)
+```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+Many OECD datasets have fairly opaque variable names, and in this case it may not 
+be obvious what the variable `birth` refers to. The function `getDimensions` helps
+with this:
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+```{r getDimensions}
+getDimensions(series = series)
+```
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+We see thus learn that the variable `birth` refers to "Place of birth". 
 
-## More Examples
+A bigger problem than opaque variable names is often non-obvious variable *values*. 
+In our example, the variable `birth` takes on the values "`r unique(df$birth)[1]`"
+and "`r unique(df$birth)[2]`". Furthermore, if you're not familiar with iso3 country
+codes, it may not be obvious whether "AUS" refers to Australia or Austria. The 
+function getDesc therefore provides a useful list of human-readable lookup-tables 
+for all the dimensions in a data set. 
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+```{r getDesc}
+desc <- getDesc(series = series)
+desc$birth
+desc$location[1:10,]
+```
 
+We thus learn that "`r unique(df$birth)[1]`" and "`r unique(df$birth)[2]`" mean
+"`r unique(desc$birth)[1,2]`" and "`r unique(desc$birth)[1,2]`", respectively, and that 
+"AUS" refers to Australia.
 
-Also a quote using `>`:
+If we want more in-depth information about a dataset (e.g. methodology, exact
+definitions of variables, etc), the function `browseMetadata` opens up a web
+browser with the metadata for the requested series.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r browseMetadata, eval = FALSE}
+browseMetadata(series = series, data = data)
+```
+
+By default, most datasets are downloaded in a "long" format, which makes it
+very easy to work with. As an example, the following code calculates the ratio 
+of the unemployment rates for foreign-born residents and native-born residents
+and plots the result:
+
+```{r plot, cache = FALSE, fig.width = 4, fig.height = 5, fig.cap = "Unemployment rates of foreign- and native-born populations"}
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+
+df$year <- as.numeric(df$year)
+
+df %>%
+  filter(rate == "U_RATE", gender == "TOT", year == 2012) %>%
+  group_by(year, country, gender) %>%
+  summarize(ratio = value[birth == "FB"] / value[birth == "NB"]) %>%
+  qplot(data = ., x = ratio, y = reorder(country, ratio), ylab = NULL,
+          xlab = expression(frac("Unemployment rate of foreign-born", 
+                                 "Unemployment rate of native-born")))
+```
+
+We learn from the plot that many countries appear to have difficulties
+integrating their foreign-born population into their labor markets. In Belgium, 
+for example, the unemployment rate of the foreign-born population is more than 2.5
+times greater than the unemployment rate of the native-born population. In contrast, 
+the unemployment rate for foreign-borns in the United States is actually marginally
+*lower* than the unemployment rate of its native-born population.
+
+### Other information
+
+The OECD API is ["released as a prototype, and is subject to change"](http://stats.oecd.org/opendataapi/OData.html). As a result, 
+the `oecd` package may break from time to time, as I update it to incorporate 
+changes to the API. If you notice a bug (or if you have suggestions for 
+improvements), please don't hesitate to contact me or send a pull request. 
