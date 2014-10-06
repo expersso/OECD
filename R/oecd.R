@@ -48,12 +48,12 @@ getDatasets <- function() {
 #' Returns a data frame containing the series codes, descriptions, and 
 #' (optionally) metadata for the OECD series which match the given criteria.
 #' 
+#' @param string A string to search for. Can include regular expressions.
+#' 
 #' @param data The data frame to search. This can be either a data frame 
 #' previously fetched using \code{\link{getDatasets}} (recommended) or left 
 #' blank, in which case a temporary data frame is fetched. The second option 
 #' adds a few seconds to each search query.
-#' 
-#' @param string A string to search for. Can include regular expressions.
 #' 
 #' @param metadata Whether or not to include a variable with metadata in the 
 #' returned data frame.
@@ -66,7 +66,7 @@ getDatasets <- function() {
 #' datasets <- getDatasets()
 #' searchSeries(datasets, "unemployment")
 #' @export
-searchSeries <- function(data = getDatasets(), string = "unemployment", metadata = FALSE) {
+searchSeries <- function(string = "unemployment", data = getDatasets(), metadata = FALSE) {
   results <- data[stringr::str_detect(data$DatasetTitle, stringr::ignore.case(string)),]
   if(!metadata) results <- results[,-3]
   return(results)
@@ -150,7 +150,7 @@ getDesc <- function(series) {
   for(i in 2:length(names(codelist_children))) {
     list <- XML::xmlChildren(codelist_children[[i]])[-1] 
     df_code_temp <- do.call(rbind, lapply(list, XML::xmlAttrs))
-    df_desc_temp <- XML::xmlToDataFrame(list)
+    df_desc_temp <- XML::xmlToDataFrame(list, stringsAsFactors = FALSE)
     df_desc <- data.frame(df_code_temp, df_desc_temp, 
                           row.names = NULL, stringsAsFactors = FALSE)
     df_desc <- df_desc[,-ncol(df_desc)]
