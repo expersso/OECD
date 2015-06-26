@@ -26,7 +26,7 @@ get_datasets <- function() {
 
 #' Get the data structure of a dataset.
 #' 
-#' Returs a list of data frames containing names and descriptions of the variables 
+#' Returns a list of data frames containing names and descriptions of the variables 
 #' of a specified series.
 #' 
 #' @param dataset A string containing the code for a dataset
@@ -103,11 +103,11 @@ browse_metadata <- function(dataset) {
 #' each dimension of the dataset (see \code{examples} below). If no filter is specified,
 #' the function downloads all dimensions unfiltered.
 #' 
-#' @param start_time If left blank, no time filter is applied (i.e. all observations since
-#' the earliest available observation are downloaded). If end_time is specified, 
-#' a \code{start_time} must also be specified.
+#' @param start_time Starting time for data. If left blank, no time filter is 
+#' applied (i.e. all observations since the earliest available observation are 
+#' downloaded). If end_time is specified, a \code{start_time} must also be specified.
 #' 
-#' @param end_time
+#' @param end_time End time for data.
 #' 
 #' @return A data frame
 #' 
