@@ -24,6 +24,32 @@ get_datasets <- function() {
     .[, -1]  
 }
 
+#' Search codes and descriptions of available OECD series
+#' 
+#' Returns a data frame containing the series codes and descriptions for the 
+#' OECD series which match the given criteria.
+#' 
+#' @param string A string to search for. Can be a regular expression.
+#' 
+#' @param data The data frame to search. This can be either a data frame 
+#' previously fetched using \code{\link{get_datasets}} (recommended) or left 
+#' blank, in which case a temporary data frame is fetched. The second option 
+#' adds a few seconds to each search query.
+#' 
+#' @return A data frame.
+#' 
+#' @seealso \code{\link{get_datasets}}
+#' 
+#' @examples
+#' dsets <- get_datasets()
+#' search_series("employment", dsets)
+#' @export
+search_dataset <- function(string, data = get_datasets()) {
+  data %>% 
+    dplyr::filter(stringr::str_detect(description, 
+                                      stringr::regex(string, ignore.case = TRUE)))
+}
+
 #' Get the data structure of a dataset.
 #' 
 #' Returns a list of data frames containing names and descriptions of the variables 
@@ -109,6 +135,9 @@ browse_metadata <- function(dataset) {
 #' 
 #' @param end_time End time for data.
 #' 
+#' @param pre_formatted boolean. Set to TRUE if filter to be applied is already 
+#' formatted (e.g. if copied from the OECD's SDMX generator (see example below)).
+#' 
 #' @return A data frame
 #' 
 #' @examples
@@ -120,16 +149,35 @@ browse_metadata <- function(dataset) {
 #' df <- get_dataset("EPL_OV", filter = list(c("DEU", "FRA"), c("EPRC_V1", "EPRC_V2")), 
 #'        start_time = 2008, end_time = 2010)
 #' head(df, 10)
+#'
+#' # Use pre-formatted filter copied from stats.oecd.org
+#' df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10+BE21.TOTAL+BIOTECH+ICT", start_time = 2008, end_time = 2010, pre_formatted = TRUE)
+#' head(df, 10)
 #' 
 #' @export
-get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NULL) {
-    
-  if (is.null(filter)) {
+get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NULL, 
+                        pre_formatted = FALSE) {
+  
+  # Case error
+  if (is.null(filter) && pre_formatted) {
+    stop("If pre_formatted is TRUE, you must provide a value to the filter argument.")
+  }
+  
+  # Case all data
+  if (is.null(filter) && !pre_formatted) {
     filter <- "all"
-  } else {
-    filter <- filter %>% 
-      lapply(function(x) paste(x, collapse = "+")) %>% 
-      paste(collapse = ".")
+  } 
+  
+  # Case user-provided filter
+  if (!is.null(filter) && !pre_formatted) {
+      filter <- filter %>% 
+        lapply(function(x) paste(x, collapse = "+")) %>% 
+        paste(collapse = ".")
+  }
+  
+  # Case pre-formatted filter
+  if (!is.null(filter) && pre_formatted) {
+    filter <- filter
   }
   
   path <- sprintf("restsdmx/sdmx.ashx/GetData/%s/%s/all", dataset, filter)
@@ -140,7 +188,9 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
                    "query"    = list("startTime" = start_time,
                                      "endTime" = end_time))
   class(url_list) <- "url"
-  url <- httr::build_url(url_list)
-  rsdmx::readSDMX(url) %>% 
+  
+  url_list %>% 
+    httr::build_url() %>%
+    rsdmx::readSDMX() %>% 
     as.data.frame()
 }
