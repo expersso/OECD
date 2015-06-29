@@ -17,6 +17,6 @@ Returns a list of data frames containing names and descriptions of the variables
 of a specified series.
 }
 \examples{
-get_data_structure("DUR_D")
+#get_data_structure("DUR_D")
 }
 

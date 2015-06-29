@@ -4,7 +4,8 @@
 \alias{get_dataset}
 \title{Download OECD data sets.}
 \usage{
-get_dataset(dataset, filter = NULL, start_time = NULL, end_time = NULL)
+get_dataset(dataset, filter = NULL, start_time = NULL, end_time = NULL,
+  pre_formatted = FALSE)
 }
 \arguments{
 \item{dataset}{A string with the code for the desired data set}
@@ -18,6 +19,9 @@ applied (i.e. all observations since the earliest available observation are
 downloaded). If end_time is specified, a \code{start_time} must also be specified.}
 
 \item{end_time}{End time for data.}
+
+\item{pre_formatted}{boolean. Set to TRUE if filter to be applied is already
+formatted (e.g. if copied from the OECD's SDMX generator (see example below)).}
 }
 \value{
 A data frame
@@ -27,12 +31,16 @@ Returns a data frame with the requested data, downloaded through the OECD's API.
 }
 \examples{
 # Get entire dataset
-df <- get_dataset("EPL_OV")
-head(df, 10)
+#df <- get_dataset("EPL_OV")
+#head(df, 10)
 
 # Apply filter on dimensions "country" and "series"
-df <- get_dataset("EPL_OV", filter = list(c("DEU", "FRA"), c("EPRC_V1", "EPRC_V2")),
-       start_time = 2008, end_time = 2010)
-head(df, 10)
+#df <- get_dataset("EPL_OV", filter = list(c("DEU", "FRA"), c("EPRC_V1", "EPRC_V2")),
+#       start_time = 2008, end_time = 2010)
+#head(df, 10)
+
+# Use pre-formatted filter copied from stats.oecd.org
+#df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10+BE21.TOTAL+BIOTECH+ICT", start_time = 2008, end_time = 2010, pre_formatted = TRUE)
+#head(df, 10)
 }
 

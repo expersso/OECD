@@ -1,7 +1,7 @@
 Package: oecd
 Type: Package
 Title: Search and extract data from the OECD
-Version: 1.0
+Version: 0.1
 Date: 2014-10-06
 Authors@R: person("Bill", "Clay", email = "expersso5@gmail.com",
     role = c("aut", "cre"))

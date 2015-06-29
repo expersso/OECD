@@ -13,8 +13,8 @@ A data frame.
 Returns a data frame with two variables: \code{id} and \code{description}
 }
 \examples{
-datasets <- get_datasets()
-head(datasets)
+#datasets <- get_datasets()
+#head(datasets)
 }
 \seealso{
 \code{\link{search_dataset}} to search for a specific data set or a

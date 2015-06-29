@@ -22,8 +22,8 @@ Returns a data frame containing the series codes and descriptions for the
 OECD series which match the given criteria.
 }
 \examples{
-dsets <- get_datasets()
-search_series("employment", dsets)
+#dsets <- get_datasets()
+#search_series("employment", dsets)
 }
 \seealso{
 \code{\link{get_datasets}}

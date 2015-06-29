@@ -9,10 +9,11 @@
 #' dimensions of specified data set.
 #'
 #' @examples
-#' datasets <- get_datasets()
-#' head(datasets)
+#' #datasets <- get_datasets()
+#' #head(datasets)
 #' 
 #' @export
+#' @importFrom dplyr "%>%"
 get_datasets <- function() {
   
   "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>% 
@@ -41,8 +42,8 @@ get_datasets <- function() {
 #' @seealso \code{\link{get_datasets}}
 #' 
 #' @examples
-#' dsets <- get_datasets()
-#' search_series("employment", dsets)
+#' #dsets <- get_datasets()
+#' #search_series("employment", dsets)
 #' @export
 search_dataset <- function(string, data = get_datasets()) {
   data %>% 
@@ -60,7 +61,7 @@ search_dataset <- function(string, data = get_datasets()) {
 #' @return A list of data frames.
 #' 
 #' @examples
-#' get_data_structure("DUR_D")
+#' #get_data_structure("DUR_D")
 #'
 #' @export
 get_data_structure <- function(dataset) {
@@ -105,12 +106,12 @@ get_data_structure <- function(dataset) {
 #' 
 #' Opens up a web browser with the metadata related to the requested series.
 #' 
-#' @param series A string specifying the code of the series.
+#' @param dataset A string specifying the code of the series.
 #' 
 #' @return Opens a web page in the default web browser.
 #' 
 #' @examples
-#' # browse_metadata("DUR_D")
+#' \dontrun{browse_metadata("DUR_D")}
 #' 
 #' @export
 browse_metadata <- function(dataset) {
@@ -142,17 +143,17 @@ browse_metadata <- function(dataset) {
 #' 
 #' @examples
 #' # Get entire dataset 
-#' df <- get_dataset("EPL_OV")
-#' head(df, 10)
+#' #df <- get_dataset("EPL_OV")
+#' #head(df, 10)
 #' 
 #' # Apply filter on dimensions "country" and "series"
-#' df <- get_dataset("EPL_OV", filter = list(c("DEU", "FRA"), c("EPRC_V1", "EPRC_V2")), 
-#'        start_time = 2008, end_time = 2010)
-#' head(df, 10)
+#' #df <- get_dataset("EPL_OV", filter = list(c("DEU", "FRA"), c("EPRC_V1", "EPRC_V2")), 
+#' #       start_time = 2008, end_time = 2010)
+#' #head(df, 10)
 #'
 #' # Use pre-formatted filter copied from stats.oecd.org
-#' df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10+BE21.TOTAL+BIOTECH+ICT", start_time = 2008, end_time = 2010, pre_formatted = TRUE)
-#' head(df, 10)
+#' #df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10+BE21.TOTAL+BIOTECH+ICT", start_time = 2008, end_time = 2010, pre_formatted = TRUE)
+#' #head(df, 10)
 #' 
 #' @export
 get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NULL, 

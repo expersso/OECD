@@ -7,7 +7,7 @@
 browse_metadata(dataset)
 }
 \arguments{
-\item{series}{A string specifying the code of the series.}
+\item{dataset}{A string specifying the code of the series.}
 }
 \value{
 Opens a web page in the default web browser.
@@ -16,6 +16,6 @@ Opens a web page in the default web browser.
 Opens up a web browser with the metadata related to the requested series.
 }
 \examples{
-# browse_metadata("DUR_D")
+\dontrun{browse_metadata("DUR_D")}
 }
 
