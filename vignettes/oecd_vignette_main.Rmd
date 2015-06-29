@@ -6,7 +6,7 @@ output:
   fig_caption: yes
 
 vignette: >
-  %\VignetteIndexEntry{Reproducible and dynamic access to OECD data}
+  %\VignetteIndexEntry{Reproducible and programmatic access to OECD data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
