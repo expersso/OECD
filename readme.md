@@ -1,10 +1,3 @@
----
-title: "OECD package"
-output: html_document
----
-
-
-
 ### Introduction
 
 The `oecd` package allows the user to download data from the OECD's API in a dynamic 
@@ -143,7 +136,7 @@ function and set the `pre_formatted` argument to `TRUE`.
 # head(df)
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![oecd_screenshot](vignettes/figures/oecd.png)
 
 ### Other information
 

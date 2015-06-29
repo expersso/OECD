@@ -135,7 +135,7 @@ function and set the `pre_formatted` argument to `TRUE`.
 # head(df)
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![oecd_screenshot](vignettes/figures/oecd.png)
 
 ### Other information
 
