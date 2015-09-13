@@ -37,18 +37,21 @@ get_datasets <- function() {
 #' blank, in which case a temporary data frame is fetched. The second option 
 #' adds a few seconds to each search query.
 #' 
+#' @param ignore.case Whether the search should be case-insensitive.
+#' Defaults to \code{TRUE}.
+#' 
 #' @return A data frame.
 #' 
 #' @seealso \code{\link{get_datasets}}
 #' 
 #' @examples
 #' #dsets <- get_datasets()
-#' #search_series("employment", dsets)
+#' #search_dataset("employment", dsets)
 #' @export
-search_dataset <- function(string, data = get_datasets()) {
+search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
   data %>% 
-    dplyr::filter(stringr::str_detect(description, 
-                                      stringr::regex(string, ignore.case = TRUE)))
+    dplyr::filter(grepl(string, description, ignore.case = ignore.case)) %>%
+    as.data.frame()
 }
 
 #' Get the data structure of a dataset.
@@ -97,7 +100,7 @@ get_data_structure <- function(dataset) {
         dplyr::rename("label" = label.en)
     }
     ) %>% 
-    `names<-`(stringr::str_replace(code_names, paste0("CL_", dataset, "_"), ""))
+    `names<-`(gsub(paste0("CL_", dataset, "_"), "", code_names))
   
   c("VAR_DESC" = list(variable_desc), code_list)
 }
