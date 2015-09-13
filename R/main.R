@@ -48,6 +48,7 @@ get_datasets <- function() {
 #' #search_dataset("employment", dsets)
 #' @export
 search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
+  
   data %>% 
     dplyr::filter(grepl(string, description, ignore.case = ignore.case)) %>%
     as.data.frame()
@@ -63,7 +64,7 @@ search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
 #' @return A list of data frames.
 #' 
 #' @examples
-#' #get_data_structure("DUR_D")
+#' \dontrun{get_data_structure("DUR_D")}
 #'
 #' @export
 get_data_structure <- function(dataset) {
@@ -196,7 +197,8 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   }
 
   if (!is.null(start_time) && !is.null(end_time)) {
-    url_list = paste0(url_list, "?", start_time, ifelse(is.null(end_time), "", "&"), end_time)
+    url_list = paste0(url_list, "?", start_time, 
+                      ifelse(is.null(end_time), "", "&"), end_time)
   } else if (!is.null(start_time) | !is.null(end_time)) {
     url_list = paste0(url_list, "?", start_time, end_time)
   }
