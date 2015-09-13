@@ -9,12 +9,9 @@ Description: Search and extract data from the OECD.
 License: GPL-3
 URL: https://www.github.com/expersso/oecd
 Imports:
-    XML (>= 3.98-1.1),
-    httr (>= 0.6.1),
-    plyr (>= 1.8.1),
     dplyr (>= 0.4.1),
     rsdmx (>= 0.4-7),
-    stringr (>= 1.0.0)
+    xml2 (>= 0.1.2)
 Suggests:
     knitr
 VignetteBuilder: knitr

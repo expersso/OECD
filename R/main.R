@@ -16,13 +16,12 @@
 #' @importFrom dplyr "%>%"
 get_datasets <- function() {
   
-  "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>% 
-    httr::GET() %>% 
-    httr::content() %>% 
-    XML::xmlToList() %>% 
-    .[["KeyFamilies"]] %>% 
-    plyr::ldply(function(x) data.frame("id" = x$.attrs["id"], "description" = x$Name$text)) %>% 
-    .[, -1]  
+  "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>%
+    xml2::read_xml() %>%
+    xml2::as_list() %>%
+    data.frame(id = sapply(bb[[2]], attr, "id"),
+               description = sapply(bb[[2]], function(x) x[[1]][[1]]),
+               stringsAsFactors = FALSE)
 }
 
 #' Search codes and descriptions of available OECD series
@@ -37,18 +36,22 @@ get_datasets <- function() {
 #' blank, in which case a temporary data frame is fetched. The second option 
 #' adds a few seconds to each search query.
 #' 
+#' @param ignore.case Whether the search should be case-insensitive.
+#' Defaults to \code{TRUE}.
+#' 
 #' @return A data frame.
 #' 
 #' @seealso \code{\link{get_datasets}}
 #' 
 #' @examples
 #' #dsets <- get_datasets()
-#' #search_series("employment", dsets)
+#' #search_dataset("employment", dsets)
 #' @export
-search_dataset <- function(string, data = get_datasets()) {
+search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
+  
   data %>% 
-    dplyr::filter(stringr::str_detect(description, 
-                                      stringr::regex(string, ignore.case = TRUE)))
+    dplyr::filter(grepl(string, description, ignore.case = ignore.case)) %>%
+    as.data.frame()
 }
 
 #' Get the data structure of a dataset.
@@ -61,7 +64,7 @@ search_dataset <- function(string, data = get_datasets()) {
 #' @return A list of data frames.
 #' 
 #' @examples
-#' #get_data_structure("DUR_D")
+#' \dontrun{get_data_structure("DUR_D")}
 #'
 #' @export
 get_data_structure <- function(dataset) {
@@ -97,7 +100,7 @@ get_data_structure <- function(dataset) {
         dplyr::rename("label" = label.en)
     }
     ) %>% 
-    `names<-`(stringr::str_replace(code_names, paste0("CL_", dataset, "_"), ""))
+    `names<-`(gsub(paste0("CL_", dataset, "_"), "", code_names))
   
   c("VAR_DESC" = list(variable_desc), code_list)
 }
@@ -182,16 +185,26 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   }
   
   path <- sprintf("restsdmx/sdmx.ashx/GetData/%s/%s/all", dataset, filter)
-  
-  url_list <- list("scheme"   = "http", 
-                   "hostname" = "stats.oecd.org",
-                   "path"     = path,
-                   "query"    = list("startTime" = start_time,
-                                     "endTime" = end_time))
-  class(url_list) <- "url"
-  
+    
+  url_list = paste0("http://stats.oecd.org/", path)
+
+  if (!is.null(start_time)) {
+    start_time = paste0("startTime=", start_time)
+  }
+
+  if (!is.null(end_time)) {
+    end_time = paste0("endTime=", end_time)
+  }
+
+  if (!is.null(start_time) && !is.null(end_time)) {
+    url_list = paste0(url_list, "?", start_time, 
+                      ifelse(is.null(end_time), "", "&"), end_time)
+  } else if (!is.null(start_time) | !is.null(end_time)) {
+    url_list = paste0(url_list, "?", start_time, end_time)
+  }
+  return(url_list)
+
   url_list %>% 
-    httr::build_url() %>%
     rsdmx::readSDMX() %>% 
     as.data.frame()
 }
