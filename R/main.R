@@ -21,8 +21,8 @@ get_datasets <- function() {
     httr::content() %>% 
     XML::xmlToList() %>% 
     .[["KeyFamilies"]] %>% 
-    plyr::ldply(function(x) data.frame("id" = x$.attrs["id"], "description" = x$Name$text)) %>% 
-    .[, -1]  
+    lapply(function(x) dplyr::data_frame("id" = x$.attrs["id"], "description" = x$Name$text)) %>% 
+    dplyr::bind_rows()
 }
 
 #' Search codes and descriptions of available OECD series
