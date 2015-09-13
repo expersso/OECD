@@ -16,13 +16,12 @@
 #' @importFrom dplyr "%>%"
 get_datasets <- function() {
   
-  "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>% 
-    httr::GET() %>% 
-    httr::content() %>% 
-    XML::xmlToList() %>% 
-    .[["KeyFamilies"]] %>% 
-    lapply(function(x) dplyr::data_frame("id" = x$.attrs["id"], "description" = x$Name$text)) %>% 
-    dplyr::bind_rows()
+  "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>%
+    xml2::read_xml() %>%
+    xml2::as_list() %>%
+    data.frame(id = sapply(bb[[2]], attr, "id"),
+               description = sapply(bb[[2]], function(x) x[[1]][[1]]),
+               stringsAsFactors = FALSE)
 }
 
 #' Search codes and descriptions of available OECD series
@@ -185,16 +184,25 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   }
   
   path <- sprintf("restsdmx/sdmx.ashx/GetData/%s/%s/all", dataset, filter)
-  
-  url_list <- list("scheme"   = "http", 
-                   "hostname" = "stats.oecd.org",
-                   "path"     = path,
-                   "query"    = list("startTime" = start_time,
-                                     "endTime" = end_time))
-  class(url_list) <- "url"
-  
+    
+  url_list = paste0("http://stats.oecd.org/", path)
+
+  if (!is.null(start_time)) {
+    start_time = paste0("startTime=", start_time)
+  }
+
+  if (!is.null(end_time)) {
+    end_time = paste0("endTime=", end_time)
+  }
+
+  if (!is.null(start_time) && !is.null(end_time)) {
+    url_list = paste0(url_list, "?", start_time, ifelse(is.null(end_time), "", "&"), end_time)
+  } else if (!is.null(start_time) | !is.null(end_time)) {
+    url_list = paste0(url_list, "?", start_time, end_time)
+  }
+  return(url_list)
+
   url_list %>% 
-    httr::build_url() %>%
     rsdmx::readSDMX() %>% 
     as.data.frame()
 }
