@@ -139,12 +139,12 @@ function and set the `pre_formatted` argument to `TRUE`.
 
 
 ```r
-# df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10.TOTAL+BIOTECH", 
-#                   pre_formatted = TRUE)
-# head(df)
+df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10.TOTAL+BIOTECH", 
+                  pre_formatted = TRUE)
+head(df)
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![oecd_screenshot](vignettes/figures/oecd.png)
 
 ### Other information
 
