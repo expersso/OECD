@@ -12,7 +12,7 @@ vignette: >
 ---
 
 ```{r options, echo=FALSE}
-knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, fig.path = "./figures")
+knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, fig.path = "./figures", eval = FALSE)
 library(oecd)
 ```
 
@@ -23,7 +23,7 @@ and reproducible way.
 
 The package can be installed with the following code:
 
-```{r loadLibrary, eval = FALSE}
+```{r loadLibrary}
 library(devtools)
 install_github("expersso/oecd")
 library(oecd)
@@ -38,23 +38,23 @@ descriptions, and then run searches on it. The search string can be a
 case-insensitive.
 
 ```{r get_datasets}
-# data <- get_datasets()
-# search_dataset(string = "unemployment", data = data)
+data <- get_datasets()
+search_dataset(string = "unemployment", data = data)
 ```
 
 In the following, we'll explore the `DUR_D` data set, which contains data on 
 the duration of unemployment.
 
 ```{r dataset}
-# dataset <- "DUR_D"
+dataset <- "DUR_D"
 ```
 
 Before downloading the series we are interested in, it is often prudent to look
 at the data structure, to see what type of breakdowns the data set offers:
 
 ```{r get_data_structure}
-# dstruc <- get_data_structure(dataset)
-# str(dstruc, max.level = 1)
+dstruc <- get_data_structure(dataset)
+str(dstruc, max.level = 1)
 ```
 
 The `get_data_structure` function returns a list of dataframes with human-readable
@@ -62,7 +62,7 @@ values for variable names and values. The first data frame contains the variable
 names and shows the dimensions of a dataset:
 
 ```{r show_var_desc}
-# dstruc$VAR_DESC
+dstruc$VAR_DESC
 ```
 
 It is often easiest not to specify any filters at this point, but rather download
@@ -72,8 +72,8 @@ time. To illustrate, let's find out the available filters for the variables `SEX
 and `AGE`:
 
 ```{r breakdowns}
-# dstruc$SEX
-# dstruc$AGE
+dstruc$SEX
+dstruc$AGE
 ```
 
 Let's say we're only interested in the duration of unemployment of men aged 
@@ -81,9 +81,9 @@ Let's say we're only interested in the duration of unemployment of men aged
 the `filter` argument of the `get_dataset` function:
 
 ```{r get_dataset}
-# filter_list <- list(c("DEU", "FRA"), "MW", "2024")
-# df <- get_dataset(dataset = dataset, filter = filter_list)
-# head(df)
+filter_list <- list(c("DEU", "FRA"), "MW", "2024")
+df <- get_dataset(dataset = dataset, filter = filter_list)
+head(df)
 ```
 
 Let's say we're only interested in long-term unemployment. We can then first look
@@ -91,8 +91,8 @@ at the variable `DURATION` to find the different levels, then go back to our lis
 of variable descriptions to learn what they mean:
 
 ```{r duration}
-# unique(df$DURATION)
-# dstruc$DURATION
+unique(df$DURATION)
+dstruc$DURATION
 ```
 
 We could of course merge the two data structures, but I rarely find that useful
@@ -106,20 +106,20 @@ We can now subset to only those unemployed for a year or more, and finally produ
 library(dplyr)
 library(ggplot2)
 
-# df %>% 
-#   filter(DURATION == "UN5") %>% 
-#   mutate(obsTime = as.numeric(obsTime)) %>% 
-#   qplot(data = ., x = obsTime, y = obsValue, color = COUNTRY, geom = "line") +
-#   labs(x = NULL, y = "Persons, thousands", color = NULL,
-#        title = "Number of long-term unemployed men, aged 20-24")
+df %>% 
+  filter(DURATION == "UN5") %>% 
+  mutate(obsTime = as.numeric(obsTime)) %>% 
+  qplot(data = ., x = obsTime, y = obsValue, color = COUNTRY, geom = "line") +
+  labs(x = NULL, y = "Persons, thousands", color = NULL,
+       title = "Number of long-term unemployed men, aged 20-24")
 ```
 
 If we want more in-depth information about a dataset (e.g. methodology, exact
 definitions of variables, etc), `browse_metadata` opens up a web
 browser with the metadata for the requested series.
 
-```{r browse_metadata, eval = FALSE}
-# browse_metadata(dataset)
+```{r browse_metadata}
+browse_metadata(dataset)
 ```
 
 ### Alternative data-acquisition strategy
