@@ -8,16 +8,24 @@ output: html_document
 
 ### Introduction
 
-The `oecd` package allows the user to download data from the OECD's API in a dynamic 
+The `OECD` package allows the user to download data from the OECD's API in a dynamic 
 and reproducible way.
 
-The package can be installed with the following code:
+The package can be installed either from CRAN...
+
+
+```r
+install.packages("OECD")
+library(OECD)
+```
+
+...or from Github:
 
 
 ```r
 library(devtools)
-install_github("expersso/oecd")
-library(oecd)
+install_github("expersso/OECD")
+library(OECD)
 ```
 
 ### How to use the package

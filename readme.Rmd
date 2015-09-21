@@ -6,7 +6,7 @@ output: html_document
 
 ```{r options, echo=FALSE}
 knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, fig.path = "./figures", eval = FALSE)
-library(oecd)
+library(OECD)
 ```
 
 ### Introduction
@@ -14,7 +14,14 @@ library(oecd)
 The `OECD` package allows the user to download data from the OECD's API in a dynamic 
 and reproducible way.
 
-The package can be installed with the following code:
+The package can be installed either from CRAN...
+
+```{r cran}
+install.packages("OECD")
+library(OECD)
+```
+
+...or from Github:
 
 ```{r loadLibrary}
 library(devtools)
