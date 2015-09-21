@@ -1,3 +1,5 @@
+utils::globalVariables(c("en", "id", "description", "label.en", "."))
+
 #' Get a data frame with information on all available datasets.
 #' 
 #' Returns a data frame with two variables: \code{id} and \code{description}
