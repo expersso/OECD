@@ -69,6 +69,7 @@ search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
 #' \dontrun{get_data_structure("DUR_D")}
 #'
 #' @export
+#' @importFrom("methods", "slot")
 get_data_structure <- function(dataset) {
   
   url <- paste0("http://stats.oecd.org/restsdmx/sdmx.ashx/GetDataStructure/", dataset)
@@ -119,10 +120,11 @@ get_data_structure <- function(dataset) {
 #' \dontrun{browse_metadata("DUR_D")}
 #' 
 #' @export
+#' @importFrom("utils", "browseURL")
 browse_metadata <- function(dataset) {
   "http://stats.oecd.org/OECDStat_Metadata/ShowMetadata.ashx?Dataset=%s&Lang=en" %>% 
     sprintf(dataset) %>% 
-    browseURL(url)
+    utils::browseURL(url)
 }
 
 #' Download OECD data sets.

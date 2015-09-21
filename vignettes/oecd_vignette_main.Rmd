@@ -13,20 +13,20 @@ vignette: >
 
 ```{r options, echo=FALSE}
 knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, fig.path = "./figures", eval = FALSE)
-library(oecd)
+library(OECD)
 ```
 
 ### Introduction
 
-The `oecd` package allows the user to download data from the OECD's API in a dynamic 
+The `OECD` package allows the user to download data from the OECD's API in a dynamic 
 and reproducible way.
 
 The package can be installed with the following code:
 
 ```{r loadLibrary}
 library(devtools)
-install_github("expersso/oecd")
-library(oecd)
+install_github("expersso/OECD")
+library(OECD)
 ```
 
 ### How to use the package
@@ -138,9 +138,9 @@ see screenshot below).
 function and set the `pre_formatted` argument to `TRUE`.
 
 ```{r example}
-# df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10.TOTAL+BIOTECH", 
-#                   pre_formatted = TRUE)
-# head(df)
+df <- get_dataset("PATS_REGION", filter = "PCT_A.INVENTORS.BEL+BE10.TOTAL+BIOTECH", 
+                  pre_formatted = TRUE)
+head(df)
 ```
 
 ![oecd_screenshot](figures/oecd.png)
@@ -148,7 +148,7 @@ function and set the `pre_formatted` argument to `TRUE`.
 ### Other information
 
 The OECD API is currently a beta version and ["and in preparation for the full release, the structure and content of datasets are being reviewed and are likely to evolve"](http://stats.oecd.org/OpenDataAPI/index.htm). As a result, 
-the `oecd` package may break from time to time, as I update it to incorporate 
+the `OECD` package may break from time to time, as I update it to incorporate 
 changes to the API. If you notice a bug (or if you have suggestions for 
 improvements), please don't hesitate to contact me or send a pull request.
 
