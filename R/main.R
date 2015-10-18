@@ -58,7 +58,7 @@ get_datasets <- function(...) {
 #' @export
 search_dataset <- function(string, data = get_datasets(),  ignore.case = TRUE) {
   
-  df[grepl("Public", df$title, ignore.case = ignore.case), ]
+  df[grepl(string, df$title, ignore.case = ignore.case), ]
 }
 
 #' Get the data structure of a dataset.
