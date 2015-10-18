@@ -4,10 +4,12 @@
 \alias{browse_metadata}
 \title{Browse the metadata related to a series.}
 \usage{
-browse_metadata(dataset)
+browse_metadata(dataset, ...)
 }
 \arguments{
 \item{dataset}{A string specifying the code of the series.}
+
+\item{...}{Additional parameters passed to browseURL.}
 }
 \value{
 Opens a web page in the default web browser.

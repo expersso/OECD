@@ -5,7 +5,7 @@
 \title{Download OECD data sets.}
 \usage{
 get_dataset(dataset, filter = NULL, start_time = NULL, end_time = NULL,
-  pre_formatted = FALSE)
+  pre_formatted = FALSE, ...)
 }
 \arguments{
 \item{dataset}{A string with the code for the desired data set}
@@ -22,6 +22,9 @@ downloaded). If end_time is specified, a \code{start_time} must also be specifie
 
 \item{pre_formatted}{boolean. Set to TRUE if filter to be applied is already
 formatted (e.g. if copied from the OECD's SDMX generator (see example below)).}
+
+\item{...}{Additional parameters passed to \code{data.frame} (e.g.
+  stringsAsFactors = FALSE).}
 }
 \value{
 A data frame

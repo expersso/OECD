@@ -7,15 +7,14 @@
 search_dataset(string, data = get_datasets(), ignore.case = TRUE)
 }
 \arguments{
-\item{string}{A string to search for. Can be a regular expression.}
+\item{string}{A regular expression string to search for.}
 
 \item{data}{The data frame to search. This can be either a data frame
 previously fetched using \code{\link{get_datasets}} (recommended) or left
 blank, in which case a temporary data frame is fetched. The second option
 adds a few seconds to each search query.}
 
-\item{ignore.case}{Whether the search should be case-insensitive.
-Defaults to \code{TRUE}.}
+\item{ignore.case}{Whether the search should be case-insensitive.}
 }
 \value{
 A data frame.

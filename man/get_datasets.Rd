@@ -4,7 +4,11 @@
 \alias{get_datasets}
 \title{Get a data frame with information on all available datasets.}
 \usage{
-get_datasets()
+get_datasets(...)
+}
+\arguments{
+\item{...}{Additional parameters passed to \code{data.frame} (e.g.
+  stringsAsFactors = FALSE).}
 }
 \value{
 A data frame.
@@ -18,7 +22,7 @@ Returns a data frame with two variables: \code{id} and \code{description}
 }
 \seealso{
 \code{\link{search_dataset}} to search for a specific data set or a
-keyword in the description, and \code{\link{get_data_structure}} to get the
-dimensions of specified data set.
+  keyword in the description, and \code{\link{get_data_structure}} to get the
+  dimensions of specified data set.
 }
 

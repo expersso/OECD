@@ -4,28 +4,33 @@ utils::globalVariables(c("en", "id", "description", "label.en", "."))
 #' 
 #' Returns a data frame with two variables: \code{id} and \code{description}
 #' 
+#' @param ... Additional parameters passed to \code{data.frame} (e.g.
+#'   stringsAsFactors = FALSE).
+#'   
 #' @return A data frame.
-#' 
+#'   
 #' @seealso \code{\link{search_dataset}} to search for a specific data set or a 
-#' keyword in the description, and \code{\link{get_data_structure}} to get the 
-#' dimensions of specified data set.
-#'
+#'   keyword in the description, and \code{\link{get_data_structure}} to get the
+#'   dimensions of specified data set.
+#'   
 #' @examples
 #' \dontrun{datasets <- get_datasets()}
 #' \dontrun{head(datasets)}
 #' 
 #' @export
-#' @importFrom dplyr "%>%"
-get_datasets <- function() {
+get_datasets <- function(...) {
   
-  "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all" %>% 
-    httr::GET() %>% 
-    httr::content() %>% 
-    XML::xmlToList() %>% 
-    .[["KeyFamilies"]] %>% 
-    lapply(function(x) dplyr::data_frame("id" = x$.attrs["id"], 
-                                         "description" = x$Name$text)) %>% 
-    dplyr::bind_rows()
+  url <- "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all"
+  
+  page <- xml2::read_xml(url)
+  
+  id <- xml2::xml_attr(
+    xml2::xml_find_all(page, xpath = "//*[@agencyID='OECD']"), "id")
+  
+  title <- xml2::xml_text(
+    xml2::xml_find_all(page, xpath = "//*[@agencyID='OECD']/*[@xml:lang='en']"))
+  
+  data.frame(id, title, ...)
 }
 
 #' Search codes and descriptions of available OECD series
@@ -33,7 +38,7 @@ get_datasets <- function() {
 #' Returns a data frame containing the series codes and descriptions for the 
 #' OECD series which match the given criteria.
 #' 
-#' @param string A string to search for. Can be a regular expression.
+#' @param string A regular expression string to search for.
 #' 
 #' @param data The data frame to search. This can be either a data frame 
 #' previously fetched using \code{\link{get_datasets}} (recommended) or left 
@@ -41,7 +46,6 @@ get_datasets <- function() {
 #' adds a few seconds to each search query.
 #' 
 #' @param ignore.case Whether the search should be case-insensitive.
-#' Defaults to \code{TRUE}.
 #' 
 #' @return A data frame.
 #' 
@@ -50,12 +54,11 @@ get_datasets <- function() {
 #' @examples
 #' \dontrun{dsets <- get_datasets()}
 #' \dontrun{search_dataset("employment", dsets)}
+#' 
 #' @export
-search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
+search_dataset <- function(string, data = get_datasets(),  ignore.case = TRUE) {
   
-  data %>% 
-    dplyr::filter(grepl(string, description, ignore.case = ignore.case)) %>%
-    as.data.frame()
+  df[grepl("Public", df$title, ignore.case = ignore.case), ]
 }
 
 #' Get the data structure of a dataset.
@@ -71,43 +74,40 @@ search_dataset <- function(string, data = get_datasets(), ignore.case = TRUE) {
 #' \dontrun{get_data_structure("DUR_D")}
 #'
 #' @export
-#' @importFrom methods "slot"
+#' @import methods
 get_data_structure <- function(dataset) {
   
-  url <- paste0("http://stats.oecd.org/restsdmx/sdmx.ashx/GetDataStructure/", dataset)
+  url <- paste0("http://stats.oecd.org/restsdmx/sdmx.ashx/GetDataStructure/",
+                dataset)
   data_structure <- rsdmx::readSDMX(url)
   
   # First data frame in returned list: data frame with full variables names
-  variable_desc <- data_structure %>% 
-    slot("concepts") %>% 
-    as.data.frame() %>%
-    dplyr::rename("description" = en)
+  variable_desc <- data.frame(data_structure@concepts)
   
-  # Drop French descriptions
+  # Clean up names (keeping only id and English description)
   variable_desc[] <- lapply(variable_desc, as.character)
-  variable_desc$description[is.na(variable_desc$description)] <- 
+  
+  variable_desc$en[is.na(variable_desc$en)] <- 
     variable_desc$Name.en[!is.na(variable_desc$Name.en)]
   
-  variable_desc <- variable_desc %>% dplyr::select(id, description)
+  names(variable_desc)[length(names(variable_desc))] <- "description"
+  variable_desc <- variable_desc[, c("id", "description")]
   
   # List of data frames in returned list: descriptions of factor levels
-  code_names <- data_structure %>% 
-    slot("codelists") %>% 
-    slot("codelists") %>% 
-    vapply(function(x) slot(x, "id"), FUN.VALUE = "character")
+  code_names <- data_structure@codelists@codelists
+  code_names <- vapply(code_names, function(x) x@id, "character")
   
-  code_list <- code_names %>% 
-    lapply(function(x) {
-      data_structure %>% 
-        slot("codelists") %>% 
-        as.data.frame(codelistId = x) %>% 
-        dplyr::select(id, label.en) %>% 
-        dplyr::rename("label" = label.en)
-    }
-    ) %>% 
-    `names<-`(gsub(paste0("CL_", dataset, "_"), "", code_names))
+  code_list <-  lapply(code_names, function(x) {
+    df <- as.data.frame(data_structure@codelists, codelistId = x)
+    df <- df[, c("id", "label.en")]
+    names(df)[2] <- "label"
+    df
+  })
   
-  c("VAR_DESC" = list(variable_desc), code_list)
+  names(code_list) <- gsub(paste0("CL_", dataset, "_"), "", code_names)
+  
+  full_df_list <- c("VAR_DESC" = list(variable_desc), code_list)
+  full_df_list
 }
 
 #' Browse the metadata related to a series.
@@ -115,6 +115,7 @@ get_data_structure <- function(dataset) {
 #' Opens up a web browser with the metadata related to the requested series.
 #' 
 #' @param dataset A string specifying the code of the series.
+#' @param ... Additional parameters passed to browseURL.
 #' 
 #' @return Opens a web page in the default web browser.
 #' 
@@ -122,11 +123,13 @@ get_data_structure <- function(dataset) {
 #' \dontrun{browse_metadata("DUR_D")}
 #' 
 #' @export
-#' @importFrom utils "browseURL"
-browse_metadata <- function(dataset) {
-  "http://stats.oecd.org/OECDStat_Metadata/ShowMetadata.ashx?Dataset=%s&Lang=en" %>% 
-    sprintf(dataset) %>% 
-    utils::browseURL(url)
+browse_metadata <- function(dataset, ...) {
+  
+  url <- sprintf(
+    "http://stats.oecd.org/OECDStat_Metadata/ShowMetadata.ashx?Dataset=%s&Lang=en",
+    dataset)
+
+  utils::browseURL(url, ...)
 }
 
 #' Download OECD data sets.
@@ -148,6 +151,9 @@ browse_metadata <- function(dataset) {
 #' @param pre_formatted boolean. Set to TRUE if filter to be applied is already 
 #' formatted (e.g. if copied from the OECD's SDMX generator (see example below)).
 #' 
+#' @param ... Additional parameters passed to \code{data.frame} (e.g.
+#'   stringsAsFactors = FALSE).
+#'   
 #' @return A data frame
 #' 
 #' @examples
@@ -170,7 +176,7 @@ browse_metadata <- function(dataset) {
 #' 
 #' @export
 get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NULL, 
-                        pre_formatted = FALSE) {
+                        pre_formatted = FALSE, ...) {
   
   # Case error
   if (is.null(filter) && pre_formatted) {
@@ -184,9 +190,8 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   
   # Case user-provided filter
   if (!is.null(filter) && !pre_formatted) {
-      filter <- filter %>% 
-        lapply(function(x) paste(x, collapse = "+")) %>% 
-        paste(collapse = ".")
+      filter <- lapply(filter, function(x) paste(x, collapse = "+")) 
+      filter <- paste(filter, collapse = ".")
   }
   
   # Case pre-formatted filter
@@ -203,8 +208,6 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
                                      "endTime" = end_time))
   class(url_list) <- "url"
   
-  url_list %>% 
-    httr::build_url() %>%
-    rsdmx::readSDMX() %>% 
-    as.data.frame()
+  url <- httr::build_url(url_list)
+  as.data.frame(rsdmx::readSDMX(url), ...)
 }
