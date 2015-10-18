@@ -4,6 +4,10 @@ output: html_document
 ---
 
 [![Travis-CI Build Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD)](http://cran.r-project.org/web/packages/OECD)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/grand-total/OECD)](http://cran.r-project.org/web/packages/OECD)
+
+http://cranlogs.r-pkg.org/badges/grand-total/OECD
 
 
 

@@ -8,7 +8,7 @@ Authors@R: person("Bill", "Clay", email = "expersso5@gmail.com",
 Description: Search and extract data from the OECD.
 License: GPL-3
 URL: https://www.github.com/expersso/OECD
-BugReport: https://www.github.com/expersso/OECD/issues
+BugReports: https://www.github.com/expersso/OECD/issues
 Imports: 
     httr (>= 0.6.1),
     rsdmx (>= 0.4-7),
