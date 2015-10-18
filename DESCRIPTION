@@ -15,4 +15,5 @@ Imports:
     methods (>= 3.2.2),
     xml2
 VignetteBuilder: knitr
-Suggests: knitr
+Suggests: knitr,
+    ggplot2

@@ -10,8 +10,7 @@ vignette: >
 ---
 
 ```{r options, echo=FALSE}
-knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE,
-                      fig.path = "./figures", eval = TRUE)
+knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, eval = TRUE)
 library(OECD)
 ```
 
@@ -117,13 +116,12 @@ We can now subset to only those unemployed for a year or more, and finally
 produce a plot.
 
 ```{r plot, cache = FALSE, fig.width = 7, fig.height = 4, fig.cap = "Unemployment rates of foreign- and native-born populations"}
-library(dplyr)
+df_plot <- df[df$DURATION == "UN5", ]
+df_plot$obsTime <- as.numeric(df_plot$obsTime)
+
 library(ggplot2)
 
-df %>% 
-  filter(DURATION == "UN5") %>% 
-  mutate(obsTime = as.numeric(obsTime)) %>% 
-  qplot(data = ., x = obsTime, y = obsValue, color = COUNTRY, geom = "line") +
+qplot(data = df_plot, x = obsTime, y = obsValue, color = COUNTRY, geom = "line") +
   labs(x = NULL, y = "Persons, thousands", color = NULL,
        title = "Number of long-term unemployed men, aged 20-24")
 ```
