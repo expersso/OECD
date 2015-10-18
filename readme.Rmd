@@ -151,7 +151,7 @@ df <- get_dataset("PATS_REGION",
 head(df)
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![oecd_screenshot](vignettes/figures/oecd.png)
 
 ### Other information
 

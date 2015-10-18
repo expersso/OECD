@@ -258,7 +258,7 @@ head(df)
 ## 6        1
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![oecd_screenshot](vignettes/figures/oecd.png)
 
 ### Other information
 
