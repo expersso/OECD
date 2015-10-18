@@ -3,3 +3,4 @@
 ^readme\..*$
 ^figuresplot.*$
 ^plot-1\.png$
+^\.travis\.yml$
