@@ -2,18 +2,18 @@ Package: OECD
 Type: Package
 Title: Search and Extract Data from the OECD
 Version: 0.2.0
-Date: 2015-09-23
-Authors@R: person("Bill", "Clay", email = "expersso5@gmail.com",
+Date: 2015-10-24
+Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
 Description: Search and extract data from the OECD.
-License: GPL-3
+License: CC0
 URL: https://www.github.com/expersso/OECD
 BugReports: https://www.github.com/expersso/OECD/issues
 Imports: 
     httr (>= 0.6.1),
     rsdmx (>= 0.4-7),
     methods (>= 3.2.2),
-    xml2
+    xml2 (>= 0.1.2)
 VignetteBuilder: knitr
 Suggests: knitr,
     ggplot2

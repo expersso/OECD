@@ -24,11 +24,10 @@ get_datasets <- function(...) {
   
   page <- xml2::read_xml(url)
   
-  id <- xml2::xml_attr(
-    xml2::xml_find_all(page, xpath = "//*[@agencyID='OECD']"), "id")
+  id <- xml2::xml_attr(xml2::xml_find_all(page, "//*[@agencyID='OECD']"), "id")
   
   title <- xml2::xml_text(
-    xml2::xml_find_all(page, xpath = "//*[@agencyID='OECD']/*[@xml:lang='en']"))
+    xml2::xml_find_all(page, "//*[@agencyID='OECD']/*[@xml:lang='en']"))
   
   data.frame(id, title, ...)
 }
@@ -57,7 +56,6 @@ get_datasets <- function(...) {
 #' 
 #' @export
 search_dataset <- function(string, data = get_datasets(),  ignore.case = TRUE) {
-  
   df[grepl(string, df$title, ignore.case = ignore.case), ]
 }
 
