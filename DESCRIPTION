@@ -1,8 +1,8 @@
 Package: OECD
 Type: Package
 Title: Search and Extract Data from the OECD
-Version: 0.2.0
-Date: 2015-10-24
+Version: 0.2.1
+Date: 2015-12-04
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
 Description: Search and extract data from the OECD.
@@ -15,7 +15,7 @@ Imports:
     methods (>= 3.2.2),
     xml2 (>= 0.1.2)
 VignetteBuilder: knitr
-Suggests:
-    knitr,
-    ggplot2
+Suggests: knitr,
+    ggplot2,
+    testthat
 RoxygenNote: 5.0.1

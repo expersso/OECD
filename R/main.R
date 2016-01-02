@@ -29,7 +29,9 @@ get_datasets <- function(...) {
   title <- xml2::xml_text(
     xml2::xml_find_all(page, "//*[@agencyID='OECD']/*[@xml:lang='en']"))
   
-  data.frame(id, title, ...)
+  df <- data.frame(id, title, ...)
+  class(df) <- c("tbl_df", "tbl", "data.frame")
+  df
 }
 
 #' Search codes and descriptions of available OECD series
@@ -56,7 +58,7 @@ get_datasets <- function(...) {
 #' 
 #' @export
 search_dataset <- function(string, data = get_datasets(),  ignore.case = TRUE) {
-  df[grepl(string, df$title, ignore.case = ignore.case), ]
+  data[grepl(string, data$title, ignore.case = ignore.case), ]
 }
 
 #' Get the data structure of a dataset.
@@ -207,5 +209,7 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   class(url_list) <- "url"
   
   url <- httr::build_url(url_list)
-  as.data.frame(rsdmx::readSDMX(url), ...)
+  df <- as.data.frame(rsdmx::readSDMX(url), ...)
+  class(df) <- c("tbl_df", "tbl", "data.frame")
+  df
 }
