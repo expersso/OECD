@@ -9,11 +9,13 @@ Description: Search and extract data from the OECD.
 License: CC0
 URL: https://www.github.com/expersso/OECD
 BugReports: https://www.github.com/expersso/OECD/issues
-Imports: 
+Imports:
     httr (>= 0.6.1),
     rsdmx (>= 0.4-7),
     methods (>= 3.2.2),
     xml2 (>= 0.1.2)
 VignetteBuilder: knitr
-Suggests: knitr,
+Suggests:
+    knitr,
     ggplot2
+RoxygenNote: 5.0.1
