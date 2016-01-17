@@ -1,16 +1,19 @@
 ## Test environments
-* Windows 7 x64, R 3.2.2
 * ubuntu 12.04, R 3.2.2
+* Windows (winbuilder)
 
-## Update of previous version 0.1
+## Update of previous version 0.2
 
-* Drop dependance on plyr, stringr, and XML packages.
-* Clean up internals to speed up parsing of results.
+- Fix error when building vignette (following apparent API change)
+- Add additional exception handling
 
-## Second submission
+0 ERRORs, 0 WARNINGS, 1 NOTE:
 
-* The author has been changed: the previous name ("Bill Clay") is a pseudonym 
-used during development and was erroneously kept in when the package was first 
-submitted to CRAN (see e.g. packages "ameco" and "gesis", which have the same 
-combination of author name and email as the current submission). My sincere
-apologies for this mistake.
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Eric Persson <expersso5@gmail.com>'
+
+Possibly mis-spelled words in DESCRIPTION:
+  OECD (3:41, 8:47)
+  
+- No word appears to misspelled (possibly erroneously thinking 'Persson' 
+should be 'Person')

@@ -99,8 +99,10 @@ get_data_structure <- function(dataset) {
   
   code_list <-  lapply(code_names, function(x) {
     df <- as.data.frame(data_structure@codelists, codelistId = x)
-    df <- df[, c("id", "label.en")]
-    names(df)[2] <- "label"
+    try({
+      df <- df[, c("id", "label.en")]
+      names(df)[2] <- "label"
+    }, silent = TRUE)
     df
   })
   
