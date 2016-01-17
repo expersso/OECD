@@ -14,8 +14,8 @@ Imports:
     rsdmx (>= 0.4-7),
     methods (>= 3.2.2),
     xml2 (>= 0.1.2)
-VignetteBuilder: knitr
-Suggests: knitr,
+VignetteBuilder: rmarkdown
+Suggests: rmarkdown,
     ggplot2,
     testthat
 RoxygenNote: 5.0.1
