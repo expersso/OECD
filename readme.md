@@ -3,9 +3,10 @@ title: "OECD package"
 output: html_document
 ---
 
-[![Travis-CI Build Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD)](http://cran.r-project.org/web/packages/OECD)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/OECD)](http://cran.r-project.org/web/packages/OECD)
+[![Travis-CI Build Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
+[![codecov.io](https://codecov.io/github/expersso/OECD/coverage.svg?branch=master)](https://codecov.io/github/expersso/OECD?branch=master)
+[![Cranlogs Downloads](http://cranlogs.r-pkg.org/badges/grand-total/OECD)](http://cran.r-project.org/web/packages/OECD)
 
 
 
@@ -80,7 +81,7 @@ str(dstruc, max.level = 1)
 ##  $ OBS_STATUS     :'data.frame':	14 obs. of  2 variables:
 ##  $ UNIT           :'data.frame':	295 obs. of  2 variables:
 ##  $ POWERCODE      :'data.frame':	32 obs. of  2 variables:
-##  $ REFERENCEPERIOD:'data.frame':	56 obs. of  2 variables:
+##  $ REFERENCEPERIOD:'data.frame':	68 obs. of  2 variables:
 ##  $ TIME_FORMAT    :'data.frame':	5 obs. of  2 variables:
 ```
 
