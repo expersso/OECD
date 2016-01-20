@@ -1,8 +1,3 @@
----
-title: "OECD package"
-output: html_document
----
-
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD)](http://cran.r-project.org/web/packages/OECD)
 [![Travis-CI Build Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
 [![codecov.io](https://codecov.io/github/expersso/OECD/coverage.svg?branch=master)](https://codecov.io/github/expersso/OECD?branch=master)
