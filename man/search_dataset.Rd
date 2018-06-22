@@ -31,4 +31,3 @@ OECD series which match the given criteria.
 \seealso{
 \code{\link{get_datasets}}
 }
-

@@ -2,7 +2,7 @@
 title: "Reproducible and dynamic access to OECD data"
 date: "`r Sys.Date()`"
 output:
-  rmarkdown::pdf_document
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Reproducible and programmatic access to OECD data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -63,6 +63,10 @@ dataset <- "DUR_D"
 
 Before downloading the series we are interested in, it is often prudent to look 
 at the data structure, to see what type of breakdowns the data set offers:
+
+```{r first_sleep, echo=FALSE}
+Sys.sleep(5)
+```
 
 ```{r get_data_structure}
 dstruc <- get_data_structure(dataset)
@@ -132,6 +136,10 @@ browser with the metadata for the requested series.
 
 ```{r browse_metadata, eval=FALSE}
 browse_metadata(dataset)
+```
+
+```{r second_sleep, echo=FALSE}
+Sys.sleep(5)
 ```
 
 ### Alternative data-acquisition strategy

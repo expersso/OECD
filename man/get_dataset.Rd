@@ -51,4 +51,3 @@ Returns a data frame with the requested data, downloaded through the OECD's API.
 \dontrun{head(df, 10)}
 
 }
-

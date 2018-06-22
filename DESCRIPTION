@@ -18,4 +18,4 @@ VignetteBuilder: rmarkdown
 Suggests: rmarkdown,
     ggplot2,
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
