@@ -1,12 +1,11 @@
 ---
 title: "Reproducible and dynamic access to OECD data"
 date: "`r Sys.Date()`"
-output:
-  rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Reproducible and programmatic access to OECD data}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[utf8]{inputenc}
 ---
 
 ```{r options, echo=FALSE}
