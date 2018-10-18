@@ -20,4 +20,3 @@ of a specified series.
 \dontrun{get_data_structure("DUR_D")}
 
 }
-

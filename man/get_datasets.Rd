@@ -26,4 +26,3 @@ Returns a data frame with two variables: \code{id} and \code{description}
   keyword in the description, and \code{\link{get_data_structure}} to get the
   dimensions of specified data set.
 }
-

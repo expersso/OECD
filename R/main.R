@@ -19,7 +19,7 @@ utils::globalVariables(c("en", "id", "description", "label.en", "."))
 #' @export
 get_datasets <- function(...) {
   
-  url <- "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all"
+  url <- "https://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all"
   
   page <- xml2::read_xml(httr::GET(url, ...))
   
@@ -76,7 +76,7 @@ search_dataset <- function(string, data = get_datasets(),  ignore.case = TRUE) {
 #' @import methods
 get_data_structure <- function(dataset) {
   
-  url <- paste0("http://stats.oecd.org/restsdmx/sdmx.ashx/GetDataStructure/",
+  url <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetDataStructure/",
                 dataset)
   data_structure <- rsdmx::readSDMX(url)
   
@@ -127,7 +127,7 @@ get_data_structure <- function(dataset) {
 browse_metadata <- function(dataset, ...) {
   
   url <- sprintf(
-    "http://stats.oecd.org/OECDStat_Metadata/ShowMetadata.ashx?Dataset=%s&Lang=en",
+    "https://stats.oecd.org/OECDStat_Metadata/ShowMetadata.ashx?Dataset=%s&Lang=en",
     dataset)
 
   utils::browseURL(url, ...)
@@ -202,7 +202,7 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   
   path <- sprintf("restsdmx/sdmx.ashx/GetData/%s/%s/all", dataset, filter)
   
-  url_list <- list("scheme"   = "http", 
+  url_list <- list("scheme"   = "https", 
                    "hostname" = "stats.oecd.org",
                    "path"     = path,
                    "query"    = list("startTime" = start_time,

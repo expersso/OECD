@@ -21,4 +21,3 @@ Opens up a web browser with the metadata related to the requested series.
 \dontrun{browse_metadata("DUR_D")}
 
 }
-
