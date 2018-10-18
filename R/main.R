@@ -4,8 +4,7 @@ utils::globalVariables(c("en", "id", "description", "label.en", "."))
 #' 
 #' Returns a data frame with two variables: \code{id} and \code{description}
 #' 
-#' @param ... Additional parameters passed to \code{data.frame} (e.g.
-#'   stringsAsFactors = FALSE).
+#' @param ... Additional parameters passed to \code{httr::GET}.
 #'   
 #' @return A data frame.
 #'   
@@ -22,14 +21,14 @@ get_datasets <- function(...) {
   
   url <- "http://stats.oecd.org/RestSDMX/sdmx.ashx/GetKeyFamily/all"
   
-  page <- xml2::read_xml(url)
+  page <- xml2::read_xml(httr::GET(url, ...))
   
   id <- xml2::xml_attr(xml2::xml_find_all(page, "//*[@agencyID='OECD']"), "id")
   
   title <- xml2::xml_text(
     xml2::xml_find_all(page, "//*[@agencyID='OECD']/*[@xml:lang='en']"))
   
-  df <- data.frame(id, title, ...)
+  df <- data.frame(id, title)
   class(df) <- c("tbl_df", "tbl", "data.frame")
   df
 }
