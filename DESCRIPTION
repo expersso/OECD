@@ -1,11 +1,12 @@
 Package: OECD
 Type: Package
 Title: Search and Extract Data from the OECD
-Version: 0.2.3.999
-Date: 2018-06-21
+Version: 0.2.4
+Date: 2019-10-14
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
-Description: Search and extract data from the OECD.
+Description: Search and extract data from the Organization for Economic 
+    Cooperation and Development (OECD).
 License: CC0
 URL: https://www.github.com/expersso/OECD
 BugReports: https://www.github.com/expersso/OECD/issues
@@ -14,8 +15,10 @@ Imports:
     rsdmx (>= 0.4-7),
     methods (>= 3.2.2),
     xml2 (>= 0.1.2)
-VignetteBuilder: rmarkdown
+VignetteBuilder: knitr
 Suggests: rmarkdown,
     ggplot2,
-    testthat
-RoxygenNote: 6.0.1
+    testthat,
+    knitr
+RoxygenNote: 6.1.1
+Encoding: UTF-8

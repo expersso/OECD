@@ -7,8 +7,7 @@
 get_datasets(...)
 }
 \arguments{
-\item{...}{Additional parameters passed to \code{data.frame} (e.g.
-stringsAsFactors = FALSE).}
+\item{...}{Additional parameters passed to \code{httr::GET}.}
 }
 \value{
 A data frame.

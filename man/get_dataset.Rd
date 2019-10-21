@@ -4,8 +4,8 @@
 \alias{get_dataset}
 \title{Download OECD data sets.}
 \usage{
-get_dataset(dataset, filter = NULL, start_time = NULL, end_time = NULL,
-  pre_formatted = FALSE, ...)
+get_dataset(dataset, filter = NULL, start_time = NULL,
+  end_time = NULL, pre_formatted = FALSE, ...)
 }
 \arguments{
 \item{dataset}{A string with the code for the desired data set}

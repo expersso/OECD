@@ -1,6 +1,7 @@
 dataset <- "DUR_D"
 
 test_that("get_data_structure returns a list of data frame with positive length", {
+  skip_on_cran()
   Sys.sleep(10)
   dstruc <- get_data_structure(dataset)
 
@@ -10,6 +11,7 @@ test_that("get_data_structure returns a list of data frame with positive length"
 })
 
 test_that("get_dataset returns a data frame with positive length", {
+  skip_on_cran()
   Sys.sleep(10)
   filter_list <- list(c("DEU", "FRA"), "MW", "2024")
   df <- get_dataset(dataset = dataset, filter = filter_list)

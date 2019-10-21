@@ -4,7 +4,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Reproducible and programmatic access to OECD data}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\usepackage[utf8]{inputenc}
 ---
 
@@ -154,24 +154,16 @@ workflow would then be as follows:
 1. Copy the generated filter expression (which follows directly after the data set name, 
 see screenshot below).
 1. Insert this expression as the value to the `filter` argument of the `get_dataset` 
-function and set the `pre_formatted` argument to `TRUE`.
+function.
 
 ```{r example}
-df <- get_dataset("PATS_REGION",
-                  filter = "PCT_A.INVENTORS.BEL+BE10.TOTAL+BIOTECH", 
-                  pre_formatted = TRUE)
+df <- get_dataset("REGION_INNOVATION", 
+                  "1+2.BEL+BE1+BE2+BE3+BEZZ.PCT_BIOTECH.ALL+AVG.2013+2014+2015")
 head(df)
 ```
 
-![oecd_screenshot](figures/oecd.png)
+![OECD Screenshot](figures/oecd.png)
 
 ### Other information
-
-The OECD API is currently a beta version and ["and in preparation for the full
-release, the structure and content of datasets are being reviewed and are likely
-to evolve"](http://stats.oecd.org/OpenDataAPI/index.htm). As a result, the
-`OECD` package may break from time to time, as I update it to incorporate 
-changes to the API. If you notice a bug (or if you have suggestions for 
-improvements), please don't hesitate to contact me or send a pull request.
 
 This package is in no way officially related to or endorsed by the OECD.
