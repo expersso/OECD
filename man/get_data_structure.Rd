@@ -13,10 +13,12 @@ get_data_structure(dataset)
 A list of data frames.
 }
 \description{
-Returns a list of data frames containing names and descriptions of the variables 
+Returns a list of data frames containing names and descriptions of the variables
 of a specified series.
 }
 \examples{
-\dontrun{get_data_structure("DUR_D")}
+\dontrun{
+get_data_structure("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES")
+}
 
 }

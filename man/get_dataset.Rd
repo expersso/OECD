@@ -4,27 +4,30 @@
 \alias{get_dataset}
 \title{Download OECD data sets.}
 \usage{
-get_dataset(dataset, filter = NULL, start_time = NULL,
-  end_time = NULL, pre_formatted = FALSE, ...)
+get_dataset(
+  dataset,
+  filter = NULL,
+  start_time = NULL,
+  end_time = NULL,
+  last_n_observations = NULL,
+  ...
+)
 }
 \arguments{
 \item{dataset}{A string with the code for the desired data set}
 
-\item{filter}{A list of character vectors specifying filters to be applied to 
-each dimension of the dataset (see \code{examples} below). If no filter is specified,
-the function downloads all dimensions unfiltered.}
+\item{filter}{A character vectors specifying the filter to be applied to
+each dimension of the dataset (see \code{examples} below).}
 
-\item{start_time}{Starting time for data. If left blank, no time filter is 
-applied (i.e. all observations since the earliest available observation are 
-downloaded). If end_time is specified, a \code{start_time} must also be specified.}
+\item{start_time}{Starting time/period for data. If left blank, no time filter is
+applied (i.e. all observations since the earliest available observation are
+downloaded).}
 
-\item{end_time}{End time for data.}
+\item{end_time}{End time/period for data.}
 
-\item{pre_formatted}{boolean. Set to TRUE if filter to be applied is already 
-formatted (e.g. if copied from the OECD's SDMX generator (see example below)).}
+\item{last_n_observations}{Number of most recent observations to download.}
 
-\item{...}{Additional parameters passed to \code{data.frame} (e.g.
-stringsAsFactors = FALSE).}
+\item{...}{Additional parameters passed to \code{read_sdmx}}
 }
 \value{
 A data frame
@@ -33,21 +36,12 @@ A data frame
 Returns a data frame with the requested data, downloaded through the OECD's API.
 }
 \examples{
-# Get entire dataset 
-\dontrun{df <- get_dataset("EPL_OV")}
-\dontrun{head(df, 10)}
-
-# Apply filter on dimensions "country" and "series"
-\dontrun{df <- get_dataset("EPL_OV", 
-                           filter = list(c("DEU", "FRA"), 
-                           c("EPRC_V1", "EPRC_V2")), 
-                           start_time = 2008, end_time = 2010)}
-\dontrun{head(df, 10)}
-
-# Use pre-formatted filter copied from stats.oecd.org
-\dontrun{df <- get_dataset("PATS_REGION", 
-               filter = "PCT_A.INVENTORS.BEL+BE10+BE21.TOTAL+BIOTECH+ICT",
-               start_time = 2008, end_time = 2010, pre_formatted = TRUE)}
-\dontrun{head(df, 10)}
+# Get entire dataset
+\dontrun{
+df <- get_dataset("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES", "AUS+CAN.A....")
+}
+\dontrun{
+head(df, 10)
+}
 
 }

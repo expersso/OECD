@@ -1,7 +1,7 @@
-# OECD 0.2.0
+# OECD 0.3.0
 
 ## Changes
 
-* Drop dependence on `plyr` and `stringr` packages (@briatte, #1).
-* Drop dependence on `XML` package (suggestion by @briatte).
-* Clean up internals to speed up parsing of results.
+* Update package to align with the new OECD API version.
+* Drop unnecessary functions for downloading/searching data catalogue.
+* Drop `pre_formatted` argument from `get_dataset` function.

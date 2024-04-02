@@ -1,15 +1,20 @@
 ---
-title: "Reproducible and dynamic access to OECD data"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Reproducible and programmatic access to OECD data}
-  %\VignetteEngine{knitr::knitr}
-  %\usepackage[utf8]{inputenc}
+format: gfm
+standalone: true
 ---
 
+# OECD
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD)](http://cran.r-project.org/web/packages/OECD)
+[![Travis-CI Build Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
+[![codecov.io](https://codecov.io/github/expersso/OECD/coverage.svg?branch=master)](https://codecov.io/github/expersso/OECD?branch=master)
+[![Cranlogs Downloads](http://cranlogs.r-pkg.org/badges/grand-total/OECD)](http://cran.r-project.org/web/packages/OECD)
+
 ```{r options, echo=FALSE}
-knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, eval = TRUE)
+knitr::opts_chunk$set(
+  cache = FALSE, warning = FALSE, error = FALSE, eval = TRUE,
+  fig.path = ""
+)
 library(OECD)
 ```
 
@@ -37,11 +42,11 @@ The best way to use the package is to use the [OECD Data Explorer](https://data-
 
 In this example we will use data National Accounts at a Glance Chapter 1: GDP:
 
-![](figures/search_result.png)
+![](vignettes/figures/search_result.png)
 
 After filtering the data using the in-browser data explorer, click the "Developer API" button as seen in the screenshot below. 
 
-![](figures/filter.png)
+![](vignettes/figures/filter.png)
 
 We extract the first string (respresenting the dataset as a whole) and the second string (representing the filter we've applied):
 

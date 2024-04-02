@@ -1,8 +1,8 @@
 Package: OECD
 Type: Package
 Title: Search and Extract Data from the OECD
-Version: 0.2.4
-Date: 2019-10-14
+Version: 0.3.0
+Date: 2024-04-02
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
 Description: Search and extract data from the Organization for Economic 
@@ -20,5 +20,5 @@ Suggests: rmarkdown,
     ggplot2,
     testthat,
     knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.2.3
 Encoding: UTF-8
