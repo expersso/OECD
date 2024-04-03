@@ -38,7 +38,7 @@ Returns a data frame with the requested data, downloaded through the OECD's API.
 \examples{
 # Get entire dataset
 \dontrun{
-df <- get_dataset("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES", "AUS+CAN.A....")
+df <- get_dataset("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES,1.0", "AUS+CAN.A....")
 }
 \dontrun{
 head(df, 10)

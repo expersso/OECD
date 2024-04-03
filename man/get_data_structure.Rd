@@ -18,7 +18,7 @@ of a specified series.
 }
 \examples{
 \dontrun{
-get_data_structure("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES")
+get_data_structure("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES/1.0")
 }
 
 }

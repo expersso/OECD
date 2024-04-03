@@ -51,7 +51,7 @@ After filtering the data using the in-browser data explorer, click the "Develope
 We extract the first string (respresenting the dataset as a whole) and the second string (representing the filter we've applied):
 
 ```{r}
-dataset <- "OECD.SDD.NAD,DSD_NAAG@DF_NAAG_I"
+dataset <- "OECD.SDD.NAD,DSD_NAAG@DF_NAAG_I,1.0"
 filter <- "A.USA+EU.B1GQ_R_POP+B1GQ_R_GR.USD_PPP_PS+PC."
 ```
 

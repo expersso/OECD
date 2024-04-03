@@ -11,7 +11,7 @@ utils::globalVariables(c("en", "id", "description", "label.en", "."))
 #'
 #' @examples
 #' \dontrun{
-#' get_data_structure("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES")
+#' get_data_structure("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES/1.0")
 #' }
 #'
 #' @export
@@ -21,7 +21,7 @@ get_data_structure <- function(dataset) {
   dataset <- gsub(",", "/", dataset)
 
   url <- paste0(
-    "https://sdmx.oecd.org/public/rest/dataflow/", dataset, "/1.0?references=all"
+    "https://sdmx.oecd.org/public/rest/dataflow/", dataset, "?references=all"
   )
   data_structure <- rsdmx::readSDMX(url)
 
@@ -82,7 +82,7 @@ get_data_structure <- function(dataset) {
 #' @examples
 #' # Get entire dataset
 #' \dontrun{
-#' df <- get_dataset("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES", "AUS+CAN.A....")
+#' df <- get_dataset("OECD.SDD.NAD.SEEA/DSD_NAT_RES@DF_NAT_RES,1.0", "AUS+CAN.A....")
 #' }
 #' \dontrun{
 #' head(df, 10)
@@ -95,7 +95,7 @@ get_dataset <- function(dataset, filter = NULL, start_time = NULL, end_time = NU
   dataset <- gsub("/", ",", dataset)
 
   path <- paste0(
-    "/public/rest/data/", dataset, ",1.0/", filter
+    "/public/rest/data/", dataset, "/", filter
   )
 
   url_list <- list(
