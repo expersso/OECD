@@ -2,12 +2,12 @@
 
 # OECD
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD.png)](http://cran.r-project.org/web/packages/OECD)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/OECD)](http://cran.r-project.org/web/packages/OECD)
 [![Travis-CI Build
 Status](https://travis-ci.org/expersso/OECD.svg?branch=master)](https://travis-ci.org/expersso/OECD)
 [![codecov.io](https://codecov.io/github/expersso/OECD/coverage.svg?branch=master)](https://codecov.io/github/expersso/OECD?branch=master)
 [![Cranlogs
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/OECD.png)](http://cran.r-project.org/web/packages/OECD)
+Downloads](http://cranlogs.r-pkg.org/badges/grand-total/OECD)](http://cran.r-project.org/web/packages/OECD)
 
 ### Introduction
 
@@ -73,20 +73,20 @@ head(df)
     4                D                 S1       _Z        2    A          _Z
     5                D                 S1       _Z        2    A          _Z
     6                D                 S1       _Z        2    A          _Z
-        MEASURE OBS_STATUS         ObsValue PRICE_BASE REF_AREA REF_YEAR_PRICE
-    1 B1GQ_R_GR          A 1.76202213801051          L       EU           <NA>
-    2 B1GQ_R_GR          A 2.65890962083748          L       EU           <NA>
-    3 B1GQ_R_GR          A 3.00387127627695          L       EU           <NA>
-    4 B1GQ_R_GR          A 2.94990334327997          L       EU           <NA>
-    5 B1GQ_R_GR          A 3.86436536858204          L       EU           <NA>
-    6 B1GQ_R_GR          A 2.13343923659157          L       EU           <NA>
+        MEASURE OBS_STATUS           ObsValue PRICE_BASE REF_AREA REF_YEAR_PRICE
+    1 B1GQ_R_GR          A   3.29272245024867          L      USA           <NA>
+    2 B1GQ_R_GR          A   5.25550196715072          L      USA           <NA>
+    3 B1GQ_R_GR          A   5.64567975906082          L      USA           <NA>
+    4 B1GQ_R_GR          A -0.540550189302288          L      USA           <NA>
+    5 B1GQ_R_GR          A -0.205619193188354          L      USA           <NA>
+    6 B1GQ_R_GR          A   5.38803390599542          L      USA           <NA>
       SECTOR TIME_PERIOD TRANSACTION TRANSFORMATION UNIT_MEASURE UNIT_MULT
-    1     S1        1996        B1GQ             G1           PC         0
-    2     S1        1997        B1GQ             G1           PC         0
-    3     S1        1998        B1GQ             G1           PC         0
-    4     S1        1999        B1GQ             G1           PC         0
-    5     S1        2000        B1GQ             G1           PC         0
-    6     S1        2001        B1GQ             G1           PC         0
+    1     S1        1971        B1GQ             G1           PC         0
+    2     S1        1972        B1GQ             G1           PC         0
+    3     S1        1973        B1GQ             G1           PC         0
+    4     S1        1974        B1GQ             G1           PC         0
+    5     S1        1975        B1GQ             G1           PC         0
+    6     S1        1976        B1GQ             G1           PC         0
 
 We select the relevant variables:
 
@@ -103,13 +103,13 @@ names(df) <- tolower(names(df))
 head(df)
 ```
 
-      ref_area   measure unit_measure time_period obsvalue
-    1       EU B1GQ_R_GR           PC        1996 1.762022
-    2       EU B1GQ_R_GR           PC        1997 2.658910
-    3       EU B1GQ_R_GR           PC        1998 3.003871
-    4       EU B1GQ_R_GR           PC        1999 2.949903
-    5       EU B1GQ_R_GR           PC        2000 3.864365
-    6       EU B1GQ_R_GR           PC        2001 2.133439
+      ref_area   measure unit_measure time_period   obsvalue
+    1      USA B1GQ_R_GR           PC        1971  3.2927225
+    2      USA B1GQ_R_GR           PC        1972  5.2555020
+    3      USA B1GQ_R_GR           PC        1973  5.6456798
+    4      USA B1GQ_R_GR           PC        1974 -0.5405502
+    5      USA B1GQ_R_GR           PC        1975 -0.2056192
+    6      USA B1GQ_R_GR           PC        1976  5.3880339
 
 It’s not immediately clear what the values of the variables `measure`
 and `unit_measure` represent, so we fetch a data dictionary and join in
@@ -159,13 +159,13 @@ df <- df |>
 head(df)
 ```
 
-      unit_measure   measure ref_area time_period obsvalue
-    1           PC B1GQ_R_GR       EU        1996 1.762022
-    2           PC B1GQ_R_GR       EU        1997 2.658910
-    3           PC B1GQ_R_GR       EU        1998 3.003871
-    4           PC B1GQ_R_GR       EU        1999 2.949903
-    5           PC B1GQ_R_GR       EU        2000 3.864365
-    6           PC B1GQ_R_GR       EU        2001 2.133439
+      unit_measure   measure ref_area time_period   obsvalue
+    1           PC B1GQ_R_GR      USA        1971  3.2927225
+    2           PC B1GQ_R_GR      USA        1972  5.2555020
+    3           PC B1GQ_R_GR      USA        1973  5.6456798
+    4           PC B1GQ_R_GR      USA        1974 -0.5405502
+    5           PC B1GQ_R_GR      USA        1975 -0.2056192
+    6           PC B1GQ_R_GR      USA        1976  5.3880339
                                   measure_lbl  unit_measure_lbl
     1 Real gross domestic product growth rate Percentage change
     2 Real gross domestic product growth rate Percentage change

@@ -1,5 +1,7 @@
 ---
-format: gfm
+format: 
+  gfm:
+    default-image-extension: ''
 standalone: true
 ---
 

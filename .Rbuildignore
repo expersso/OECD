@@ -6,3 +6,5 @@
 ^\.travis\.yml$
 ^NEWS\.md$
 ^cran-comments\.md$
+^\..*e$
+^CRAN-SUBMISSION$

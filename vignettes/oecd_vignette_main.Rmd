@@ -9,7 +9,8 @@ vignette: >
 ---
 
 ```{r options, echo=FALSE}
-knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, eval = TRUE)
+# Don't evaluate code chunks during R CMD check
+knitr::opts_chunk$set(cache = FALSE, warning = FALSE, error = FALSE, eval = FALSE)
 
 library(OECD)
 ```
@@ -58,6 +59,20 @@ df <- get_dataset(dataset, filter)
 head(df)
 ```
 
+When run, this returns a data frame like:
+
+```
+# A tibble: 6 × 9
+  DATAFLOW     REF_AREA MEASURE       UNIT_MEASURE TIME_PERIOD ObsValue UNIT_MULT OBS_STATUS DECIMALS
+  <chr>        <chr>    <chr>         <chr>              <dbl>    <dbl>     <dbl> <chr>         <dbl>
+1 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2010     35.7         3 ""                1
+2 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2011     36.7         3 ""                1
+3 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2012     37.0         3 ""                1
+4 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2013     37.2         3 ""                1
+5 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2014     37.8         3 ""                1
+6 DSD_NAAG@DF… EU       B1GQ_R_POP    USD_PPP_PS          2015     38.5         3 ""                1
+```
+
 We select the relevant variables:
 
 ```{r}
@@ -95,6 +110,20 @@ contains the variable names and shows the dimensions of a dataset:
 
 ```{r show_var_desc}
 data_structure$VAR_DESC
+```
+
+This would typically return:
+
+```
+        id                      description
+1 DATAFLOW           Data flow identifier
+2 REF_AREA              Reference area
+3  MEASURE                      Measure
+4 UNIT_MEASURE             Unit measure  
+5 TIME_PERIOD              Time period
+6 OBS_STATUS            Observation Status
+7 UNIT_MULT            Unit multiplier
+8 DECIMALS                     Decimals
 ```
 
 ### Other information
